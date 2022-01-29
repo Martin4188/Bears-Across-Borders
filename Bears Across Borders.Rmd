@@ -1,0 +1,15 @@
+---
+title: "Bears Across Borders"
+author: "Martin Andersson"
+date: '2022-01-29'
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+captures <- read_csv("data/captures.csv")
+```
+
