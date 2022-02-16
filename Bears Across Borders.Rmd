@@ -3,13 +3,85 @@ title: "Bears Across Borders"
 author: "Martin Andersson"
 date: '2022-01-29'
 output: html_document
+bibliography: references.bib
 ---
 
-```{r}
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
 library(tidyverse)
+library(knitr)
+
+source("Bears Script.R")
 ```
 
-```{r}
-captures <- read_csv("data/captures.csv")
+
+```{r, echo=FALSE}
+map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+  geom_point(data = capturesFinal, 
+             aes(x = lon, y = lat, size=I(0.1),stroke=I(0),shape=I(16))) +
+  labs(title = "All Samples")
+
+map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+  geom_point(data = capturesFinal, 
+             aes(x = meanlon, y = meanlat, size=I(0.1),stroke=I(0),shape=I(16))) +
+  labs(title = "All Midpoints")
+```
+
+
+
+2 bears have a very large distance from their middlepoint.
+
+```{r, echo=FALSE}
+capturesFinal %>%
+  select(id, DistanceFromMean) %>%
+  arrange(desc(DistanceFromMean)) %>%
+  head(30) %>%
+  kable()
+```
+
+I graphed the 2 outliers spill locations.
+
+```{r, echo=FALSE}
+map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+  geom_point(data = captures %>% filter(id == "BI040801 XW274 ZF-310 X12-044"), 
+             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16)))
+
+  
+  map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+  geom_point(data = captures %>% filter(id == "BI406977 Z15-247 +"), 
+             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16)))
+```
+
+Might be a problem.
+Possible fixes:
+Ignoring the 2 outliers and choosing the third largest distance as the estimate of a bears territory.
+Switching midpoints from the average value of the spills to a point whose lateral coordinate is the average value of the Westernmost samples lateral coordinate and the Easternmost samples lateral coordinate and likewise for longitude coordinate. This would center the midpoint so that the longest distance from midpoint to furthest sample is less extreme. 
+
+
+
+
+Introduction
+
+-Studying bias from double counting bears.
+-Estimating number of bears in each of the four regions.
+
+Method
+
+-Simulation Study
+-Poisson Model
+
+Results
+
+-
+
+Discussion
+
+-Try to collect samples from outside Sweden as well.
+
+References
+
+-bibtex file
+
+```{r, echo=FALSE}
+citation()
 ```
 
