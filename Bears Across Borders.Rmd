@@ -61,23 +61,68 @@ Switching midpoints from the average value of the spills to a point whose latera
 
 Introduction
 
+*Why are we doing this?*
+
+-Bear Inventory has been performed for several years.
+-Hunting quotas are set at a regional level.
 -Studying bias from double counting bears.
 -Estimating number of bears in each of the four regions.
 
-Method
+*What have been done (literature review)?*</li>*
 
--Simulation Study
--Poisson Model
+-kindberg2011estimating
 
-Results
+*How will we approach the problem?*
+
+-Simple model that can be applied to all samples.
+-Number of spills poisson distributed.
+-Bear territory a circle of specified size.
+
+***First Draft***
+
+For several years now the Swedish museum of natural history has been performing an inventory of the brown bear population in the northern half of Sweden. The region has been divided into four parts and every year a different part is investigated and every fifth year no investigations are performed. The investigation is done by soliciting hunters among others to collect stool samples from bear that they find in the forest and send it in for DNA analysis along with information on where the sample was found.Conventional statistical methods have been performed on the supplied data and estimated have been made over the years but now more specific type of analysis has been requested. 
+
+(***WRITE SOMETHING ABOUT THE KINDBERG ARTICLE***)
+
+Brown Bears have very large areas that they wander through and pay no heed to the borders specified by humans. As such a bear might be found in two different areas in two different years which can cause a bear to be counted in both areas. This is a problem since hunting quotas are not set at a national level but a regional level and as such knowing the exact number of bears in each area is important. As such the purpouse of my project is to estimate the bias introduced by double counting bears and also create my own estimate of the total numbers of bears in each area.  
+
+As a large number of bears have only been observed a single time and a large number of bears have not been observed at all, trying to apply a standard model for estimating the size and shape of a bears area is going to be difficult if not impossible. As such for the sample at hand i will be applying a simplified model that can be applied to all bears independant of the number of samples we have from each. I will also be performing a simulation study in which i will be using a more realistic model for the size and shape of the bears territories. I will be making the assumption that the number of samples from each bear follows a poisson distribution and combined with the model on the bears areas i will estimate the number of bears in each region.
+
+
+(***Standardize choice of words***)
+
+-Bears Territory/Bears Area
+
+-Area/Region
+
+***Method***
+
+*What tools are we going to use:*
+
+-Rstudio
+
+
+*Statistical models and assumptions.*
+
+-Poisson Model for number of samples found from each bear which can also be used to estimate total number of bears.
+
+-Simple model for size of territory (circle of constant size) along with more complicated one for simulation studies (Bivariate normal)
+*How are we going to estimate parameters?*
+
+-Maximum likelihood.
+*Do we need numerical methods?*
+
+-Numerical Methods for calculating the ratio of a bears territory lies on which side of the border.
+
+*Results*
 
 -
 
-Discussion
+*Discussion*
 
 -Try to collect samples from outside Sweden as well.
 
-References
+*References*
 
 -bibtex file
 
