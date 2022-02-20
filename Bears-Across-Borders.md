@@ -5,53 +5,42 @@ Martin Andersson
 
 ![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
-2 bears have a very large distance from their middlepoint.
+``` r
+RegionRatio <- function(mu1, mu2, r){
+  #Function that takes the coordinates of a midpoint and a radius to create a circle and then calculates the ratio of the circle that is contained inside each of the 4 areas or outside.
+  Territory <- st_point(c(mu1, mu2)) %>%
+    st_buffer(dist = r)
+  
+  TotalArea <- st_area(Territory)
+  
+  #Defining the Regions
+  Region1 <- st_union(map$geometry[[16]], map$geometry[[17]])
+  Region2 <- map$geometry[[20]]
+  Region3 <- st_union(map$geometry[[18]], map$geometry[[19]])
+  Region4 <- map$geometry[[21]]
+  
+  #Helper function that returns the area of the intersection of the two arguments divided by the area of the territory circle.
+  IntersectionRatio <- function(Region){
+    st_intersection(Territory, Region) %>%
+      st_area() / TotalArea
+  }
+  
+  #Calculating the ratios.
+  R1 <- IntersectionRatio(Region1)
+  R2 <- IntersectionRatio(Region2)
+  R3 <- IntersectionRatio(Region3)
+  R4 <- IntersectionRatio(Region4)
+  Other <- 1 - (R1 + R2 + R3 + R4)
+  
+  c(R1, R2, R3, R4, Other) %>%
+    round(4) %>%
+    return()
+}
 
-| id                            | DistanceFromMean |
-|:------------------------------|-----------------:|
-| BI040801 XW274 ZF-310 X12-044 |        220681.05 |
-| BI406977 Z15-247 +            |        184026.00 |
-| BI041000 ZF-108               |        121381.45 |
-| BI041294 ZF-87                |        114679.28 |
-| BI406835 Z15-105              |        110256.56 |
-| BI406835 Z15-105              |        110256.56 |
-| BI416133 Z20-482              |         99257.74 |
-| BI409367 X17-254              |         93254.73 |
-| BI407004 Z15-274 +            |         91486.06 |
-| BI415846 Z20-195              |         85676.67 |
-| BI080097 W12-118              |         83689.80 |
-| BI409101 W17-153              |         81688.12 |
-| BI414883 AC19-112             |         75305.71 |
-| BI414883 AC19-112             |         75305.71 |
-| BI416282 Z20-631              |         68293.01 |
-| BI407009 Z15-279 +            |         63629.75 |
-| BI407009 Z15-279 +            |         63389.66 |
-| BI407001 Z15-271              |         62408.08 |
-| BI407009 Z15-279 +            |         57623.13 |
-| BI407352 Z15-622 +            |         57584.13 |
-| BI407216 Z15-486 +            |         53521.64 |
-| BI407009 Z15-279 +            |         53184.63 |
-| BI407731 BD16-209             |         52867.40 |
-| BI407009 Z15-279 +            |         52501.24 |
-| BI407216 Z15-486 +            |         51618.65 |
-| BI041000 ZF-108               |         51176.86 |
-| BI407009 Z15-279 +            |         50826.26 |
-| BI409038 W17-090              |         50810.32 |
-| BI040801 XW274 ZF-310 X12-044 |         50750.33 |
-| BI407009 Z15-279 +            |         49952.44 |
+print(RegionRatio(508175, 6944989, 50000))
+```
 
-I graphed the 2 outliers spill locations.
-
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
-
-Might be a problem. Possible fixes: Ignoring the 2 outliers and choosing
-the third largest distance as the estimate of a bears territory.
-Switching midpoints from the average value of the spills to a point
-whose lateral coordinate is the average value of the Westernmost samples
-lateral coordinate and the Easternmost samples lateral coordinate and
-likewise for longitude coordinate. This would center the midpoint so
-that the longest distance from midpoint to furthest sample is less
-extreme.
+    ## [1] 0.0356 0.0000 0.9548 0.0000 0.0095
 
 Introduction
 

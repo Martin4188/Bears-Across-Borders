@@ -28,33 +28,41 @@ map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
 
 
 
-2 bears have a very large distance from their middlepoint.
-
-```{r, echo=FALSE}
-capturesFinal %>%
-  select(id, DistanceFromMean) %>%
-  arrange(desc(DistanceFromMean)) %>%
-  head(30) %>%
-  kable()
-```
-
-I graphed the 2 outliers spill locations.
-
-```{r, echo=FALSE}
-map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
-  geom_point(data = captures %>% filter(id == "BI040801 XW274 ZF-310 X12-044"), 
-             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16)))
-
+```{r}
+RegionRatio <- function(mu1, mu2, r){
+  #Function that takes the coordinates of a midpoint and a radius to create a circle and then calculates the ratio of the circle that is contained inside each of the 4 areas or outside.
+  Territory <- st_point(c(mu1, mu2)) %>%
+    st_buffer(dist = r)
   
-  map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
-  geom_point(data = captures %>% filter(id == "BI406977 Z15-247 +"), 
-             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16)))
-```
+  TotalArea <- st_area(Territory)
+  
+  #Defining the Regions
+  Region1 <- st_union(map$geometry[[16]], map$geometry[[17]])
+  Region2 <- map$geometry[[20]]
+  Region3 <- st_union(map$geometry[[18]], map$geometry[[19]])
+  Region4 <- map$geometry[[21]]
+  
+  #Helper function that returns the area of the intersection of the two arguments divided by the area of the territory circle.
+  IntersectionRatio <- function(Region){
+    st_intersection(Territory, Region) %>%
+      st_area() / TotalArea
+  }
+  
+  #Calculating the ratios.
+  R1 <- IntersectionRatio(Region1)
+  R2 <- IntersectionRatio(Region2)
+  R3 <- IntersectionRatio(Region3)
+  R4 <- IntersectionRatio(Region4)
+  Other <- 1 - (R1 + R2 + R3 + R4)
+  
+  c(R1, R2, R3, R4, Other) %>%
+    round(4) %>%
+    return()
+}
 
-Might be a problem.
-Possible fixes:
-Ignoring the 2 outliers and choosing the third largest distance as the estimate of a bears territory.
-Switching midpoints from the average value of the spills to a point whose lateral coordinate is the average value of the Westernmost samples lateral coordinate and the Easternmost samples lateral coordinate and likewise for longitude coordinate. This would center the midpoint so that the longest distance from midpoint to furthest sample is less extreme. 
+print(RegionRatio(508175, 6944989, 50000))
+
+```
 
 
 
