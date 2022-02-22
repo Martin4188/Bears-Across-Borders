@@ -3,8 +3,6 @@ Bears Across Borders
 Martin Andersson
 2022-01-29
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
-
 ``` r
 RegionRatio <- function(mu1, mu2, r){
   #Function that takes the coordinates of a midpoint and a radius to create a circle and then calculates the ratio of the circle that is contained inside each of the 4 areas or outside.
@@ -32,15 +30,48 @@ RegionRatio <- function(mu1, mu2, r){
   R4 <- IntersectionRatio(Region4)
   Other <- 1 - (R1 + R2 + R3 + R4)
   
-  c(R1, R2, R3, R4, Other) %>%
-    round(4) %>%
+  list(Region1=R1, Region2=R2, Region3=R3, Region4=R4, OtherRegion=Other) %>%
+    as_tibble() %>%
+    round(3) %>%
     return()
 }
-
-print(RegionRatio(508175, 6944989, 50000))
 ```
 
-    ## [1] 0.0356 0.0000 0.9548 0.0000 0.0095
+``` r
+TestTibble <- capturesFemale %>%
+  select(id, meanlon, meanlat) %>%
+  mutate(Ratio = RegionRatio(meanlon, meanlat, 121381)) %>%
+  mutate(Region1 = Ratio[[1]], Region2 = Ratio[[2]], Region3 = Ratio[[3]], Region4 = Ratio[[4]], RegionOther = Ratio[[5]]) %>%
+  select(-Ratio)
+
+TestTibble %>% 
+  arrange(desc(RegionOther))
+```
+
+    ## # A tibble: 1,806 x 8
+    ## # Groups:   id [1,806]
+    ##    id                  meanlon  meanlat Region1 Region2 Region3 Region4 RegionOther
+    ##    <chr>                 <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>       <dbl>
+    ##  1 BI408946 S17-008    381306  6742271    0.373   0       0.011   0           0.616
+    ##  2 BI408939 S17-001 +  382195. 6740997    0.375   0       0.01    0           0.615
+    ##  3 BI407756 BD16-236   851500. 7560285    0       0       0       0.431       0.569
+    ##  4 BI407674 BD16-149 + 856734. 7533838    0       0       0       0.48        0.52 
+    ##  5 BI409386 X17-273    605948. 6739078.   0.484   0       0       0           0.516
+    ##  6 BI407553 BD16-020 + 858771  7528040    0       0       0       0.485       0.515
+    ##  7 BI409115 X17-002 +  602058. 6733611.   0.489   0       0       0           0.511
+    ##  8 BI405021 NT117 +    439818  7166068.   0       0.153   0.338   0           0.51 
+    ##  9 BI405768 HE165      383940  6788807    0.404   0       0.093   0           0.503
+    ## 10 BI409059 W17-111    364428. 6864046.   0.227   0       0.277   0           0.496
+    ## # ... with 1,796 more rows
+
+``` r
+map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+  geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
+             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
+  labs(title = "Territory Size")
+```
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 Introduction
 
