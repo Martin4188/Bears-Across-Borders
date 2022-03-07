@@ -3,66 +3,51 @@ Bears Across Borders
 Martin Andersson
 2022-01-29
 
-``` r
-RegionRatio <- function(mu1, mu2, r){
-  #Function that takes the coordinates of a midpoint and a radius to create a circle and then calculates the ratio of the circle that is contained inside each of the 4 areas or outside.
-  Territory <- st_point(c(mu1, mu2)) %>%
-    st_buffer(dist = r)
-  
-  TotalArea <- st_area(Territory)
-  
-  #Defining the Regions
-  Region1 <- st_union(map$geometry[[16]], map$geometry[[17]])
-  Region2 <- map$geometry[[20]]
-  Region3 <- st_union(map$geometry[[18]], map$geometry[[19]])
-  Region4 <- map$geometry[[21]]
-  
-  #Helper function that returns the area of the intersection of the two arguments divided by the area of the territory circle.
-  IntersectionRatio <- function(Region){
-    st_intersection(Territory, Region) %>%
-      st_area() / TotalArea
-  }
-  
-  #Calculating the ratios.
-  R1 <- IntersectionRatio(Region1)
-  R2 <- IntersectionRatio(Region2)
-  R3 <- IntersectionRatio(Region3)
-  R4 <- IntersectionRatio(Region4)
-  Other <- 1 - (R1 + R2 + R3 + R4)
-  
-  list(Region1=R1, Region2=R2, Region3=R3, Region4=R4, OtherRegion=Other) %>%
-    as_tibble() %>%
-    round(3) %>%
-    return()
-}
-```
+    ## [1] "Male"
 
-``` r
-TestTibble <- capturesFemale %>%
-  select(id, meanlon, meanlat) %>%
-  mutate(Ratio = RegionRatio(meanlon, meanlat, 121381)) %>%
-  mutate(Region1 = Ratio[[1]], Region2 = Ratio[[2]], Region3 = Ratio[[3]], Region4 = Ratio[[4]], RegionOther = Ratio[[5]]) %>%
-  select(-Ratio)
+    ## [1] "Poisson maximum likelihood estimate"
 
-TestTibble %>% 
-  arrange(desc(RegionOther))
-```
+    ## [1] 3.973513
 
-    ## # A tibble: 1,806 x 8
-    ## # Groups:   id [1,806]
-    ##    id                  meanlon  meanlat Region1 Region2 Region3 Region4 RegionOther
-    ##    <chr>                 <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>       <dbl>
-    ##  1 BI408946 S17-008    381306  6742271    0.373   0       0.011   0           0.616
-    ##  2 BI408939 S17-001 +  382195. 6740997    0.375   0       0.01    0           0.615
-    ##  3 BI407756 BD16-236   851500. 7560285    0       0       0       0.431       0.569
-    ##  4 BI407674 BD16-149 + 856734. 7533838    0       0       0       0.48        0.52 
-    ##  5 BI409386 X17-273    605948. 6739078.   0.484   0       0       0           0.516
-    ##  6 BI407553 BD16-020 + 858771  7528040    0       0       0       0.485       0.515
-    ##  7 BI409115 X17-002 +  602058. 6733611.   0.489   0       0       0           0.511
-    ##  8 BI405021 NT117 +    439818  7166068.   0       0.153   0.338   0           0.51 
-    ##  9 BI405768 HE165      383940  6788807    0.404   0       0.093   0           0.503
-    ## 10 BI409059 W17-111    364428. 6864046.   0.227   0       0.277   0           0.496
-    ## # ... with 1,796 more rows
+    ## [1] "Zero Truncated Poisson maximum likelihood estimate"
+
+    ## [1] 3.737005
+
+    ## [1] "Average Ratio of Territory inside Sweden"
+
+    ## [1] 0.6601298
+
+    ## [1] "Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
+
+    ## [1] 2.466908
+
+    ## [1] ""
+
+    ## [1] ""
+
+    ## [1] "Female"
+
+    ## [1] "Poisson maximum likelihood estimate"
+
+    ## [1] 14.1414
+
+    ## [1] "Zero Truncated Poisson maximum likelihood estimate"
+
+    ## [1] 14.14139
+
+    ## [1] "Average Ratio of Territory inside Sweden"
+
+    ## [1] 0.8730925
+
+    ## [1] "Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
+
+    ## [1] 12.34674
+
+| sex   | Region1 | Region2 |  Region3 | Region4 | RegionSweden | RegionOther |
+|:------|--------:|--------:|---------:|--------:|-------------:|------------:|
+| Hane  | 162.795 | 194.026 |  397.128 |  90.414 |      844.306 |     434.694 |
+| Hona  | 349.128 | 278.704 |  781.766 | 167.209 |     1576.805 |     229.195 |
+| Total | 511.923 | 472.730 | 1178.894 | 257.623 |     2421.111 |     663.889 |
 
 ``` r
 map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
@@ -71,7 +56,75 @@ map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
   labs(title = "Territory Size")
 ```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+captures %>%
+  group_by(id) %>%
+  mutate(n=n())
+```
+
+    ## # A tibble: 11,952 x 7
+    ## # Groups:   id [3,076]
+    ##     year date                id                      sex      lon     lat     n
+    ##    <dbl> <dttm>              <chr>                   <chr>  <dbl>   <dbl> <int>
+    ##  1  2015 2015-08-22 00:00:00 BI041079 ZF-195 +       Hona  508175 6944989    17
+    ##  2  2015 2015-08-21 00:00:00 BI407294 Z15-564        Hona  493454 6969796    14
+    ##  3  2015 2015-08-21 00:00:00 BI406693 Y15-204        Hona  633778 7064965    18
+    ##  4  2015 2015-08-21 00:00:00 BI407131 Z15-401        Hona  471186 6887477     5
+    ##  5  2015 2015-08-22 00:00:00 BI406943 Z15-213        Hona  507902 6946007     7
+    ##  6  2015 2015-08-21 00:00:00 BI406721 Y15-232        Hane  512539 6932436     4
+    ##  7  2015 2015-08-21 00:00:00 BI080325 X12-130        Hane  554392 6997702     3
+    ##  8  2015 2015-08-22 00:00:00 BI406608 Y15-119 +      Hona  562691 7032321     4
+    ##  9  2015 2015-08-21 00:00:00 BI041205 ZF-323 Z15-294 Hona  448970 6846702     1
+    ## 10  2015 2015-08-21 00:00:00 BI407055 Z15-325 +      Hane  545853 7067272    19
+    ## # ... with 11,942 more rows
+
+``` r
+captures %>%
+  filter(id == "BI041079 ZF-195 +")
+```
+
+    ## # A tibble: 17 x 6
+    ##     year date                id                sex      lon     lat
+    ##    <dbl> <dttm>              <chr>             <chr>  <dbl>   <dbl>
+    ##  1  2015 2015-08-22 00:00:00 BI041079 ZF-195 + Hona  508175 6944989
+    ##  2  2015 2015-08-29 00:00:00 BI041079 ZF-195 + Hona  508382 6958888
+    ##  3  2015 2015-08-29 00:00:00 BI041079 ZF-195 + Hona  507744 6941276
+    ##  4  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  508379 6962180
+    ##  5  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  508592 6961572
+    ##  6  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  509652 6952554
+    ##  7  2015 2015-09-08 00:00:00 BI041079 ZF-195 + Hona  502831 6960716
+    ##  8  2015 2015-10-31 00:00:00 BI041079 ZF-195 + Hona  513416 6958123
+    ##  9  2015 2015-10-21 00:00:00 BI041079 ZF-195 + Hona  515102 6951474
+    ## 10  2015 2015-10-17 00:00:00 BI041079 ZF-195 + Hona  507431 6965059
+    ## 11  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  508883 6960184
+    ## 12  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  514110 6950991
+    ## 13  2015 2015-10-18 00:00:00 BI041079 ZF-195 + Hona  508354 6964857
+    ## 14  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  509168 6960171
+    ## 15  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  507309 6964681
+    ## 16  2015 2015-10-06 00:00:00 BI041079 ZF-195 + Hona  506008 6961394
+    ## 17  2015 2015-10-06 00:00:00 BI041079 ZF-195 + Hona  505997 6961384
+
+``` r
+capturesFemale
+```
+
+    ## # A tibble: 1,806 x 6
+    ## # Groups:   id [1,806]
+    ##    id                      sex   meanlon  meanlat DistanceFromMean     n
+    ##    <chr>                   <chr>   <dbl>    <dbl>            <dbl> <int>
+    ##  1 BI407294 Z15-564        Hona  499372. 6976594.             9013    14
+    ##  2 BI407131 Z15-401        Hona  465078  6888054.             6135     5
+    ##  3 BI041205 ZF-323 Z15-294 Hona  448970  6846702                 0     1
+    ##  4 BI406935 Z15-205 +      Hona  564044  7096505              1155     2
+    ##  5 BI407060 Z15-330        Hona  452803  6838966              2989     2
+    ##  6 BI407093 Z15-363        Hona  546785  7049658                 0     1
+    ##  7 BI406946 Z15-216 +      Hona  465297  7033731.             5170     9
+    ##  8 BI406951 Z15-221 +      Hona  487090. 7066947.            19198     5
+    ##  9 BI407101 Z15-371        Hona  496377. 7074753.            16503     9
+    ## 10 BI407006 Z15-276        Hona  413637. 6927788             33271     3
+    ## # ... with 1,796 more rows
 
 Introduction
 

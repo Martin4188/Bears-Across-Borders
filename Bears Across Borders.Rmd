@@ -28,57 +28,56 @@ source("Bears Script.R")
 
 
 
-```{r}
-RegionRatio <- function(mu1, mu2, r){
-  #Function that takes the coordinates of a midpoint and a radius to create a circle and then calculates the ratio of the circle that is contained inside each of the 4 areas or outside.
-  Territory <- st_point(c(mu1, mu2)) %>%
-    st_buffer(dist = r)
-  
-  TotalArea <- st_area(Territory)
-  
-  #Defining the Regions
-  Region1 <- st_union(map$geometry[[16]], map$geometry[[17]])
-  Region2 <- map$geometry[[20]]
-  Region3 <- st_union(map$geometry[[18]], map$geometry[[19]])
-  Region4 <- map$geometry[[21]]
-  
-  #Helper function that returns the area of the intersection of the two arguments divided by the area of the territory circle.
-  IntersectionRatio <- function(Region){
-    st_intersection(Territory, Region) %>%
-      st_area() / TotalArea
-  }
-  
-  #Calculating the ratios.
-  R1 <- IntersectionRatio(Region1)
-  R2 <- IntersectionRatio(Region2)
-  R3 <- IntersectionRatio(Region3)
-  R4 <- IntersectionRatio(Region4)
-  Other <- 1 - (R1 + R2 + R3 + R4)
-  
-  list(Region1=R1, Region2=R2, Region3=R3, Region4=R4, OtherRegion=Other) %>%
-    as_tibble() %>%
-    round(3) %>%
-    return()
-}
+```{r, echo =FALSE}
+"Male"
+"Poisson maximum likelihood estimate"
+LambdaMale1
+"Zero Truncated Poisson maximum likelihood estimate"
+LambdaMale2
+"Average Ratio of Territory inside Sweden"
+MaleAverageSweden
+"Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
+MaleAverageSweden * LambdaMale2
+""
+""
+"Female"
+"Poisson maximum likelihood estimate"
+LambdaFemale1
+"Zero Truncated Poisson maximum likelihood estimate"
+LambdaFemale2
+"Average Ratio of Territory inside Sweden"
+FemaleAverageSweden
+"Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
+FemaleAverageSweden * LambdaFemale2
+
+Estimate %>%
+  select(sex, Region1, Region2, Region3, Region4, RegionSweden, RegionOther) %>%
+  arrange(RegionSweden) %>%
+  kable()
 ```
 
-```{r}
 
-TestTibble <- capturesFemale %>%
-  select(id, meanlon, meanlat) %>%
-  mutate(Ratio = RegionRatio(meanlon, meanlat, 121381)) %>%
-  mutate(Region1 = Ratio[[1]], Region2 = Ratio[[2]], Region3 = Ratio[[3]], Region4 = Ratio[[4]], RegionOther = Ratio[[5]]) %>%
-  select(-Ratio)
 
-TestTibble %>% 
-  arrange(desc(RegionOther))
 
-```
+
+
 ```{r}
 map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
   geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
              aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
   labs(title = "Territory Size")
+```
+
+
+```{r}
+captures %>%
+  group_by(id) %>%
+  mutate(n=n())
+
+captures %>%
+  filter(id == "BI041079 ZF-195 +")
+
+capturesFemale
 ```
 
 
