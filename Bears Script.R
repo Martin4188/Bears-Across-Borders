@@ -111,9 +111,10 @@ MaxLikelihoodGenerator <- function(Tibble){
   function(lambda){
     Tibble %>%
       mutate(Likelihood = (RegionSweden*lambda) ^ n * exp(-(RegionSweden*lambda)) / factorial(n)) %>%
+      mutate(Likelihood = -log(Likelihood)) %>%
       ungroup() %>%
       select(Likelihood) %>%
-      map(prod()) %>%
+      summarise(Sum = sum(Likelihood)) %>%
       .[[1]]
   } %>%
     return()
@@ -124,9 +125,10 @@ MaxLikelihoodGeneratorZeroTrunc <- function(Tibble){
   function(lambda){
     Tibble %>%
       mutate(Likelihood = (RegionSweden*lambda) ^ n / ((exp(RegionSweden*lambda)-1) * factorial(n))) %>%
+      mutate(Likelihood = -log(Likelihood)) %>%
       ungroup() %>%
       select(Likelihood) %>%
-      map(prod()) %>%
+      summarise(Sum = sum(Likelihood)) %>%
       .[[1]]
   } %>%
     return()
@@ -137,13 +139,13 @@ FUNC2 <- MaxLikelihoodGeneratorZeroTrunc(RegionFemale)
 FUNC3 <- MaxLikelihoodGenerator(RegionMale)
 FUNC4 <- MaxLikelihoodGeneratorZeroTrunc(RegionMale)
 
-LambdaFemale1 <- optimize(f=FUNC, lower = 0, upper = 50, maximum = TRUE)$maximum[[1]]
+LambdaFemale1 <- optim(14 ,f=FUNC1, method = "BFGS", hessian = TRUE)$par[[1]]
 
-LambdaFemale2 <- optimize(f=FUNC2, lower = 0, upper = 50, maximum = TRUE)$maximum[[1]]
+LambdaFemale2 <- optim(14 ,f=FUNC2, method = "BFGS", hessian = TRUE)$par[[1]]
 
-LambdaMale1 <- optimize(f=FUNC3, lower = 0, upper = 50, maximum = TRUE)$maximum[[1]]
+LambdaMale2 <- optim(14 ,f=FUNC3, method = "BFGS", hessian = TRUE)$par[[1]]
   
-LambdaMale2 <- optimize(f=FUNC4, lower = 0, upper = 50, maximum = TRUE)$maximum[[1]]
+LambdaMale2 <- optim(14 ,f=FUNC4, method = "BFGS", hessian = TRUE)$par[[1]]
 
 #Estimating numbers of bears in each region
 

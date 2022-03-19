@@ -10,11 +10,30 @@ bibliography: references.bib
 library(tidyverse)
 library(knitr)
 
-source("Bears Script.R")
+#source("Bears Script.R")
 ```
 
 
-```{r, echo=FALSE}
+```{r}
+NaiveSimulation <- read_csv("data/NaiveSimulation1")
+
+NaiveSimulation %>%
+  group_by(lambda, sigma) %>%
+  mutate(MLEBias = abs(lambda - MLE), MeanBias = abs(lambda - Mean)) %>%
+  summarise(MLE = mean(MLE), Mean = mean(Mean), Fisher = mean(Fisher), MLEBias = mean(MLEBias), MeanBias = mean(MeanBias)) %>%
+  kable()
+```
+
+
+
+
+
+
+
+
+
+
+```{r, echo=FALSE, eval=FALSE}
 #map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
 #  geom_point(data = capturesFemale, 
 #             aes(x = lon, y = lat, size=I(0.1),stroke=I(0),shape=I(16))) +
@@ -28,57 +47,34 @@ source("Bears Script.R")
 
 
 
-```{r, echo =FALSE}
-"Male"
-"Poisson maximum likelihood estimate"
-LambdaMale1
-"Zero Truncated Poisson maximum likelihood estimate"
-LambdaMale2
-"Average Ratio of Territory inside Sweden"
-MaleAverageSweden
-"Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
-MaleAverageSweden * LambdaMale2
-""
-""
-"Female"
-"Poisson maximum likelihood estimate"
-LambdaFemale1
-"Zero Truncated Poisson maximum likelihood estimate"
-LambdaFemale2
-"Average Ratio of Territory inside Sweden"
-FemaleAverageSweden
-"Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
-FemaleAverageSweden * LambdaFemale2
 
-Estimate %>%
-  select(sex, Region1, Region2, Region3, Region4, RegionSweden, RegionOther) %>%
-  arrange(RegionSweden) %>%
-  kable()
+```{r, eval=FALSE}
+#map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+#  geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
+#             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
+#  labs(title = "Territory Size")
 ```
 
 
 
 
+***Introduction***
 
 
-```{r}
-map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
-  geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
-             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
-  labs(title = "Territory Size")
-```
 
 
-```{r}
-captures %>%
-  group_by(id) %>%
-  mutate(n=n())
 
-captures %>%
-  filter(id == "BI041079 ZF-195 +")
 
-capturesFemale
-```
+
+
+
+
+
+
+
+
+
+
 
 
 

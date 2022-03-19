@@ -2,6 +2,157 @@ library(tidyverse)
 library(sf)
 
 
+#Estimating lambda without paying attention to the bears territory.
+NaiveSimulationFunction <- function(mu, lambda, sigma){
+  
+  #Simulations
+  N <- rpois(1, 9 * mu) # Total population
+  bears <- tibble(id = 1:N,
+                  center_lon = runif(N, -3, 3),
+                  center_lat = runif(N, -3, 3),
+                  n_samples = rpois(N, lambda))
+  
+  samples <- bears %>%
+    rowwise() %>%
+    mutate(samples = list(tibble(sample_lon = rnorm(n_samples, center_lon, sigma),
+                                 sample_lat = rnorm(n_samples, center_lat, sigma)))) %>%
+    unnest(samples) %>%
+    filter(abs(sample_lon) <= 1, abs(sample_lat) <= 1) %>%
+    select(-n_samples) %>%
+    group_by(id) %>%
+    mutate(n = n())
+  
+  #Function that Generates a maximum likelihood function that can be optimized.
+  MaxLikelihoodGeneratorZeroTrunc <- function(Tibble){
+    
+    function(lambda){
+      Tibble %>%
+        mutate(Likelihood = (lambda) ^ n / ((exp(lambda) - 1) * factorial(n))) %>%
+        mutate(Likelihood = -log(Likelihood)) %>%
+        ungroup() %>%
+        select(Likelihood) %>%
+        summarise(Sum = sum(Likelihood)) %>%
+        .[[1]]
+    } %>%
+      return()
+  }
+  
+  
+  #Calculate Mean number of samples.
+  
+  nMean <- samples %>%
+    ungroup() %>%
+    select(n) %>%
+    summarise(mean(n)) %>%
+    head(1) %>%
+    .[[1]]
+  
+  #Using Optim with "BFGS"
+  
+  fit <- samples %>% 
+    select(id, n) %>%
+    distinct() %>%
+    MaxLikelihoodGeneratorZeroTrunc() %>%
+    optim(lambda, ., 
+          hessian = TRUE, 
+          method = "L-BFGS-B",
+          lower = 0.1)
+  
+  
+  Results <- list(MLE = fit$par,
+                  MeanEstimate = nMean,
+                  Fisher = as.numeric(sqrt(1 / fit$hessian))) %>%
+    as_tibble()
+  
+  return(Results)
+  
+}
+
+
+
+set.seed(2022)
+simulation_study <- expand_grid(mu = 500, lambda = 3:5, sigma = 1:3/10, sim = 1:1000) %>% 
+  rowwise() %>%
+  mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
+  mutate(MLE = results[[1]], Mean = results[[2]], Fisher = results[[3]]) %>%
+  select(-results)
+
+simulation_study %>%
+  write.csv("data/NaiveSimulation1")
+
+
+
+
+simulation_study %>%
+  group_by(lambda) %>%
+  summarise(MLE = mean(MLE), Mean = mean(Mean), Fisher = mean(Fisher))
+
+
+
+NaiveTimingFunction <- function(lambda, sigma, mu){
+  start_time <- Sys.time()
+  NaiveSimulationFunction(mu, lambda, sigma)
+  end_time <- Sys.time()
+  return(end_time - start_time)
+}
+
+
+NaiveTimingFunction(500, 4, 0.1)
+NaiveTimingFunction(500, 4, 0.3)
+NaiveTimingFunction(500, 6, 0.1)
+NaiveTimingFunction(500, 6, 0.3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SimulationFunction <- function(mu, lambda, sigma){
   
@@ -115,5 +266,22 @@ simulation_study <- expand_grid(lambda = 3:5, sigma = 2:3/10, mu = 4:6*100, sim 
 
 simulation_study
 
+write_csv(simulation_study, "data/SimulationResults1")
 
+test <- read_csv("data/SimulationResults1")
+
+
+
+TimingFunction <- function(lambda, sigma, mu){
+  start_time <- Sys.time()
+  SimulationFunction(mu, lambda, sigma)
+  end_time <- Sys.time()
+  return(end_time - start_time)
+}
+
+
+TimingFunction(3,0.1,500)
+TimingFunction(3,0.3,500)
+TimingFunction(14,0.1,500)
+TimingFunction(14,0.3,500)
 

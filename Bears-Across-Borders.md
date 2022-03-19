@@ -3,128 +3,53 @@ Bears Across Borders
 Martin Andersson
 2022-01-29
 
-    ## [1] "Male"
-
-    ## [1] "Poisson maximum likelihood estimate"
-
-    ## [1] 3.973513
-
-    ## [1] "Zero Truncated Poisson maximum likelihood estimate"
-
-    ## [1] 3.737005
-
-    ## [1] "Average Ratio of Territory inside Sweden"
-
-    ## [1] 0.6601298
-
-    ## [1] "Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
-
-    ## [1] 2.466908
-
-    ## [1] ""
-
-    ## [1] ""
-
-    ## [1] "Female"
-
-    ## [1] "Poisson maximum likelihood estimate"
-
-    ## [1] 14.1414
-
-    ## [1] "Zero Truncated Poisson maximum likelihood estimate"
-
-    ## [1] 14.14139
-
-    ## [1] "Average Ratio of Territory inside Sweden"
-
-    ## [1] 0.8730925
-
-    ## [1] "Product of Average Ratio inside Sweden and Zero Truncated Poisson Estimate"
-
-    ## [1] 12.34674
-
-| sex   | Region1 | Region2 |  Region3 | Region4 | RegionSweden | RegionOther |
-|:------|--------:|--------:|---------:|--------:|-------------:|------------:|
-| Hane  | 162.795 | 194.026 |  397.128 |  90.414 |      844.306 |     434.694 |
-| Hona  | 349.128 | 278.704 |  781.766 | 167.209 |     1576.805 |     229.195 |
-| Total | 511.923 | 472.730 | 1178.894 | 257.623 |     2421.111 |     663.889 |
-
 ``` r
-map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
-  geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
-             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
-  labs(title = "Territory Size")
+NaiveSimulation <- read_csv("data/NaiveSimulation1")
 ```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+    ## New names:
+    ## * `` -> ...1
+
+    ## Rows: 9000 Columns: 8
+
+    ## -- Column specification --------------------------------------------------------
+    ## Delimiter: ","
+    ## dbl (8): ...1, mu, lambda, sigma, sim, MLE, Mean, Fisher
+
+    ## 
+    ## i Use `spec()` to retrieve the full column specification for this data.
+    ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-captures %>%
-  group_by(id) %>%
-  mutate(n=n())
+NaiveSimulation %>%
+  group_by(lambda, sigma) %>%
+  mutate(MLEBias = abs(lambda - MLE), MeanBias = abs(lambda - Mean)) %>%
+  summarise(MLE = mean(MLE), Mean = mean(Mean), Fisher = mean(Fisher), MLEBias = mean(MLEBias), MeanBias = mean(MeanBias)) %>%
+  kable()
 ```
 
-    ## # A tibble: 11,952 x 7
-    ## # Groups:   id [3,076]
-    ##     year date                id                      sex      lon     lat     n
-    ##    <dbl> <dttm>              <chr>                   <chr>  <dbl>   <dbl> <int>
-    ##  1  2015 2015-08-22 00:00:00 BI041079 ZF-195 +       Hona  508175 6944989    17
-    ##  2  2015 2015-08-21 00:00:00 BI407294 Z15-564        Hona  493454 6969796    14
-    ##  3  2015 2015-08-21 00:00:00 BI406693 Y15-204        Hona  633778 7064965    18
-    ##  4  2015 2015-08-21 00:00:00 BI407131 Z15-401        Hona  471186 6887477     5
-    ##  5  2015 2015-08-22 00:00:00 BI406943 Z15-213        Hona  507902 6946007     7
-    ##  6  2015 2015-08-21 00:00:00 BI406721 Y15-232        Hane  512539 6932436     4
-    ##  7  2015 2015-08-21 00:00:00 BI080325 X12-130        Hane  554392 6997702     3
-    ##  8  2015 2015-08-22 00:00:00 BI406608 Y15-119 +      Hona  562691 7032321     4
-    ##  9  2015 2015-08-21 00:00:00 BI041205 ZF-323 Z15-294 Hona  448970 6846702     1
-    ## 10  2015 2015-08-21 00:00:00 BI407055 Z15-325 +      Hane  545853 7067272    19
-    ## # ... with 11,942 more rows
+    ## `summarise()` has grouped output by 'lambda'. You can override using the `.groups` argument.
+
+| lambda | sigma |      MLE |     Mean |    Fisher |   MLEBias |  MeanBias |
+|-------:|------:|---------:|---------:|----------:|----------:|----------:|
+|      3 |   0.1 | 2.522731 | 3.668154 | 0.0739489 | 0.4772685 | 0.6681542 |
+|      3 |   0.2 | 2.147131 | 3.353964 | 0.0655808 | 0.8528692 | 0.3539639 |
+|      3 |   0.3 | 1.842418 | 3.068198 | 0.0588417 | 1.1575816 | 0.0916210 |
+|      4 |   0.1 | 3.307682 | 4.559242 | 0.0791524 | 0.6923185 | 0.5592425 |
+|      4 |   0.2 | 2.784925 | 4.146991 | 0.0689373 | 1.2150750 | 0.1549855 |
+|      4 |   0.3 | 2.375321 | 3.759442 | 0.0610733 | 1.6246787 | 0.2415091 |
+|      5 |   0.1 | 4.063403 | 5.451041 | 0.0843424 | 0.9365970 | 0.4510412 |
+|      5 |   0.2 | 3.384433 | 4.924717 | 0.0721564 | 1.6155667 | 0.1126374 |
+|      5 |   0.3 | 2.876683 | 4.451993 | 0.0631377 | 2.1233174 | 0.5480072 |
 
 ``` r
-captures %>%
-  filter(id == "BI041079 ZF-195 +")
+#map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
+#  geom_point(data = captures %>% filter(id == "BI041000 ZF-108"), 
+#             aes(x = lon, y = lat, size=I(2),stroke=I(0),shape=I(16))) +
+#  labs(title = "Territory Size")
 ```
 
-    ## # A tibble: 17 x 6
-    ##     year date                id                sex      lon     lat
-    ##    <dbl> <dttm>              <chr>             <chr>  <dbl>   <dbl>
-    ##  1  2015 2015-08-22 00:00:00 BI041079 ZF-195 + Hona  508175 6944989
-    ##  2  2015 2015-08-29 00:00:00 BI041079 ZF-195 + Hona  508382 6958888
-    ##  3  2015 2015-08-29 00:00:00 BI041079 ZF-195 + Hona  507744 6941276
-    ##  4  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  508379 6962180
-    ##  5  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  508592 6961572
-    ##  6  2015 2015-09-19 00:00:00 BI041079 ZF-195 + Hona  509652 6952554
-    ##  7  2015 2015-09-08 00:00:00 BI041079 ZF-195 + Hona  502831 6960716
-    ##  8  2015 2015-10-31 00:00:00 BI041079 ZF-195 + Hona  513416 6958123
-    ##  9  2015 2015-10-21 00:00:00 BI041079 ZF-195 + Hona  515102 6951474
-    ## 10  2015 2015-10-17 00:00:00 BI041079 ZF-195 + Hona  507431 6965059
-    ## 11  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  508883 6960184
-    ## 12  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  514110 6950991
-    ## 13  2015 2015-10-18 00:00:00 BI041079 ZF-195 + Hona  508354 6964857
-    ## 14  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  509168 6960171
-    ## 15  2015 2015-10-16 00:00:00 BI041079 ZF-195 + Hona  507309 6964681
-    ## 16  2015 2015-10-06 00:00:00 BI041079 ZF-195 + Hona  506008 6961394
-    ## 17  2015 2015-10-06 00:00:00 BI041079 ZF-195 + Hona  505997 6961384
-
-``` r
-capturesFemale
-```
-
-    ## # A tibble: 1,806 x 6
-    ## # Groups:   id [1,806]
-    ##    id                      sex   meanlon  meanlat DistanceFromMean     n
-    ##    <chr>                   <chr>   <dbl>    <dbl>            <dbl> <int>
-    ##  1 BI407294 Z15-564        Hona  499372. 6976594.             9013    14
-    ##  2 BI407131 Z15-401        Hona  465078  6888054.             6135     5
-    ##  3 BI041205 ZF-323 Z15-294 Hona  448970  6846702                 0     1
-    ##  4 BI406935 Z15-205 +      Hona  564044  7096505              1155     2
-    ##  5 BI407060 Z15-330        Hona  452803  6838966              2989     2
-    ##  6 BI407093 Z15-363        Hona  546785  7049658                 0     1
-    ##  7 BI406946 Z15-216 +      Hona  465297  7033731.             5170     9
-    ##  8 BI406951 Z15-221 +      Hona  487090. 7066947.            19198     5
-    ##  9 BI407101 Z15-371        Hona  496377. 7074753.            16503     9
-    ## 10 BI407006 Z15-276        Hona  413637. 6927788             33271     3
-    ## # ... with 1,796 more rows
+Simulation
 
 Introduction
 
