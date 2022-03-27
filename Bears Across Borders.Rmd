@@ -9,22 +9,177 @@ bibliography: references.bib
 ```{r, echo=FALSE, message=FALSE,warning=FALSE}
 library(tidyverse)
 library(knitr)
+options(dplyr.summarise.inform=F)
 
+NaiveSimulation <- read_csv("data/NaiveSimulation2")
 #source("Bears Script.R")
 ```
 
 
-```{r}
-NaiveSimulation <- read_csv("data/NaiveSimulation1")
+Graphs for the Naive Simulation.
 
-NaiveSimulation %>%
-  group_by(lambda, sigma) %>%
-  mutate(MLEBias = abs(lambda - MLE), MeanBias = abs(lambda - Mean)) %>%
-  summarise(MLE = mean(MLE), Mean = mean(Mean), Fisher = mean(Fisher), MLEBias = mean(MLEBias), MeanBias = mean(MeanBias)) %>%
-  kable()
+```{r, echo = FALSE, warning=FALSE}
+MLEBiasBase <- NaiveSimulation %>%
+  select(lambda, sigma, MLE, Mean) %>%
+  pivot_longer(MLE:Mean, names_to = "method") %>%
+  group_by(lambda, sigma, method) %>%
+  summarise(bias = mean(value - lambda),
+            SE = sd(value),
+            sqrtMSE = (value - lambda) ^ 2 %>% sqrt() %>% mean()) %>%
+  ungroup()
+
+
+
+MLEBiasBase %>%
+  filter(lambda == 2) %>%
+  select(-lambda) %>% 
+  pivot_longer(-(sigma:method), names_to = "metric") %>% 
+  ggplot(aes(x = sigma, y = value, color = method)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "MLE and mean estimate bias and standard error. (Lambda = 2)", x = "Sigma", y = "")
+  
+MLEBiasBase %>%
+  filter(lambda == 3) %>%
+  select(-lambda) %>% 
+  pivot_longer(-(sigma:method), names_to = "metric") %>% 
+  ggplot(aes(x = sigma, y = value, color = method)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "MLE and mean estimate bias and standard error. (Lambda = 3)", x = "Sigma", y = "")
+
+MLEBiasBase %>%
+  filter(lambda == 4) %>%
+  select(-lambda) %>% 
+  pivot_longer(-(sigma:method), names_to = "metric") %>% 
+  ggplot(aes(x = sigma, y = value, color = method)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "MLE and mean estimate bias and standard error. (Lambda = 4)", x = "Sigma", y = "")
+  
+
 ```
 
 
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+NHatBiasBase <- NaiveSimulation %>%
+  select(-...1, -mu, -sim, -Fisher, -Mean) %>%
+  mutate(NHat = NObs / (1 - exp(-MLE)),
+         Bias = NHat - NTrue,
+         NObsFalse = NObs - NObsTrue,
+         FalseBearBias = NObsFalse / Bias)%>%
+  group_by(lambda, sigma) %>%
+  summarise(bias = mean(Bias),
+            se = sd(NHat),
+            FalseBearBias = mean(FalseBearBias)) %>%
+  mutate(TrueBearBias = 1 - FalseBearBias) %>%
+  ungroup()
+
+NHatBiasBase %>%
+  filter(lambda == 2) %>%
+  select(sigma, bias, se) %>% 
+  mutate(RelativeBias = bias / 500) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric, scales = "free") +
+  labs(title = "Bear population estimate bias and standard error. (Lambda = 2)", x = "Sigma", y = "")
+
+NHatBiasBase %>%
+  filter(lambda == 3) %>%
+  select(sigma, bias, se) %>% 
+  mutate(RelativeBias = bias / 500) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric, scales = "free") +
+  labs(title = "Bear population estimate bias and standard error. (Lambda = 3)", x = "Sigma", y = "")
+
+NHatBiasBase %>%
+  filter(lambda == 4) %>%
+  select(sigma, bias, se) %>% 
+  mutate(RelativeBias = bias / 500) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric, scales = "free") +
+  labs(title = "Bear population estimate bias and standard error. (Lambda = 4)", x = "Sigma", y = "")
+
+NHatBiasBase %>%
+  filter(lambda == 2) %>%
+  select(sigma, FalseBearBias, TrueBearBias) %>%
+  pivot_longer(-sigma, values_to = "value") %>%
+  ggplot(aes(x = sigma, y = value, color = name)) + geom_line()  + geom_point() +
+  labs(title = "Ratio of bias comes from true bears and false bears. (Lambda = 2)", x = "Sigma", y = "")
+
+NHatBiasBase %>%
+  filter(lambda == 3) %>%
+  select(sigma, FalseBearBias, TrueBearBias) %>%
+  pivot_longer(-sigma, values_to = "value") %>%
+  ggplot(aes(x = sigma, y = value, color = name)) + geom_line()  + geom_point() +
+  labs(title = "Ratio of bias comes from true bears and false bears. (Lambda = 3)", x = "Sigma", y = "")
+  
+NHatBiasBase %>%
+  filter(lambda == 4) %>%
+  select(sigma, FalseBearBias, TrueBearBias) %>%
+  pivot_longer(-sigma, values_to = "value") %>%
+  ggplot(aes(x = sigma, y = value, color = name)) + geom_line()  + geom_point() +
+  labs(title = "Ratio of bias that comes from true bears and false bears. (Lambda = 4)", x = "Sigma", y = "")
+  
+  
+```
+
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+#NFalse mean
+
+NaiveSimulation %>%
+  mutate(NObsFalse = NObs - NObsTrue) %>%
+  select(lambda, sigma, NObsFalse) %>%
+  group_by(lambda, sigma) %>%
+  summarise(NObsFalse = mean(NObsFalse)) %>%
+  mutate(lambda = toString(lambda)) %>%
+  ggplot(aes(x = sigma, y = NObsFalse, color = lambda)) + geom_line()  + geom_point() +
+  labs(title = "Mean of the number of false bears observed.", x = "Sigma", y = "")
+```
+
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+#Error in (1- exp(-lamdba))
+
+FactorErrorBase <- NaiveSimulation %>%
+  mutate(Factor = (1 - exp(-MLE)),
+         TrueFactor = (1 - exp(-lambda)),
+         bias = Factor - TrueFactor) %>%
+  group_by(lambda, sigma) %>%
+  summarise(bias = mean(bias),
+            se = sd(Factor)) %>%
+  ungroup()
+
+FactorErrorBase %>%
+  filter(lambda == 2) %>%
+  select(-lambda) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "Bias and standard error in the estimation factor. (Lambda = 2)", x = "Sigma", y = "")
+
+FactorErrorBase %>%
+  filter(lambda == 3) %>%
+  select(-lambda) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "Bias and standard error in the estimation factor. (Lambda = 3)", x = "Sigma", y = "")
+
+FactorErrorBase %>%
+  filter(lambda == 4) %>%
+  select(-lambda) %>%
+  pivot_longer(-sigma, names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric) +
+  labs(title = "Bias and standard error in the estimation factor. (Lambda = 4)", x = "Sigma", y = "")
+  
+
+```
 
 
 
@@ -60,15 +215,21 @@ NaiveSimulation %>%
 
 ***Introduction***
 
+For several years now the population size and trends of brown bears in four regions of Sweden have been monitored.
+The total population and how it changes over time is important for conservation efforts and the setting of hunting quotas.
+The monitoring and estimation of the bear population is done through the collection of scat samples. The collection is done by volunteers and genotypes are identified through dna analysis and used to get an estimate of the number of bears from which a scat sample has been obtained.
+
+The estimation of the total bear population was modeled using the Capture-Mark-Recapture method. A full explanation of the methods used can be found in Kindberg2011 
+
+The collection of spill samples takes place over 5 years in which spill samples are collected in one region each year in order with the fifth year is an offyear when no collection takes place. The samples are collected over 11 weeks in which the volunteers notes down the location of the spill and collects a small piece to send in for dna analysis.
+
+Region 1 consists of both Gävleborg and Dalarna,Region 2 is Västerbottenslän, Region 3 consists of both Västernorrlandslän and Jämtland ,  and Region 4 is Norrbottenslän
+
+A problem with the division of Sweden into Regions in this way is that brown bears do not care for these arbitrary borders.
+A bear could be found on one side of the border one year and the other in another year. Should this happen the bear would be counted twice for the census which introduces bias to the estimation. The intention of this thesis is to study the bias introduced by this border problem and analyzing whether it is possible to make adjustments to account for this bias. 
 
 
-
-
-
-
-
-
-
+We assume that each bear has a territory of some shape with a centerpoint. The centerpoints location determines which region a bear belongs to. The shape of a bears territory is going to depend on a lot of factors such as the geopraphy in the area and the age and condition of the animal in question. Furthermore male and female bears behave differently with some young male bears not sticking to any one area and just wandering in whichever direction strikes their fancy. Trying to estimate a territory unique for each bear using only samples of their spill is very difficult further complicated by a large number of bears for which only a single sample has been discovered and an unknown number of bears for which no spill samples were found at all. As such we have chosen to assume that each female bear has the same shaped territory and likewise for the male bears. The chosen shape is 
 
 
 
@@ -139,7 +300,7 @@ As a large number of bears have only been observed a single time and a large num
 
 *Discussion*
 
--Try to collect samples from outside Sweden as well.
+-
 
 *References*
 

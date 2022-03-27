@@ -10,7 +10,14 @@ NaiveSimulationFunction <- function(mu, lambda, sigma){
   bears <- tibble(id = 1:N,
                   center_lon = runif(N, -3, 3),
                   center_lat = runif(N, -3, 3),
-                  n_samples = rpois(N, lambda))
+                  n_samples = rpois(N, lambda)) %>%
+    filter(abs(center_lon) <= 1 + 3 * sigma, abs(center_lat) <= 1 +3 * sigma) %>% #Filter bears whose vertical and/or horizontal distance from the middle square is larger than 3 sigma.
+    mutate(Inside = if_else(abs(center_lon) <= 1 & abs(center_lat) <= 1, 1, 0)) #Dummy variable for being inside the central square.
+  
+  NTrue <- bears %>%
+    select(Inside) %>%
+    summarise(Inside = sum(Inside)) %>%
+    .[[1]]
   
   samples <- bears %>%
     rowwise() %>%
@@ -41,13 +48,31 @@ NaiveSimulationFunction <- function(mu, lambda, sigma){
   #Calculate Mean number of samples.
   
   nMean <- samples %>%
+    select(id, n) %>%
+    distinct() %>%
     ungroup() %>%
-    select(n) %>%
-    summarise(mean(n)) %>%
-    head(1) %>%
+    summarise(Mean = mean(n)) %>%
     .[[1]]
   
-  #Using Optim with "BFGS"
+  #Calculate Observed number of bears
+  
+  NObs <- samples %>%
+    ungroup() %>%
+    select(id) %>%
+    distinct() %>%
+    summarise(n=n()) %>%
+    .[[1]]
+  
+  #Calculate the number of observed bears whose true midpoint lies inside the middle square.
+  
+  NObsTrue <- samples %>%
+    select(id, Inside) %>%
+    distinct() %>%
+    ungroup() %>%
+    summarise(Sum = sum(Inside)) %>%
+    .[[1]]
+  
+  #Using Optim with "L-BFGS-B"
   
   fit <- samples %>% 
     select(id, n) %>%
@@ -61,7 +86,10 @@ NaiveSimulationFunction <- function(mu, lambda, sigma){
   
   Results <- list(MLE = fit$par,
                   MeanEstimate = nMean,
-                  Fisher = as.numeric(sqrt(1 / fit$hessian))) %>%
+                  Fisher = as.numeric(sqrt(1 / fit$hessian)),
+                  NTrue = NTrue,
+                  NObs = NObs,
+                  NObsTrue = NObsTrue) %>%
     as_tibble()
   
   return(Results)
@@ -69,16 +97,75 @@ NaiveSimulationFunction <- function(mu, lambda, sigma){
 }
 
 
+set.seed(2022)
+TEST <- expand_grid(mu = 500, lambda = 2:4, sigma = 1:3/10, sim = 1:10) %>% 
+  rowwise() %>%
+  mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
+  mutate(MLE = results[[1]], 
+         Mean = results[[2]], 
+         Fisher = results[[3]], 
+         NTrue = results[[4]], 
+         NObs = results[[5]], 
+         NObsTrue = results[[6]]) %>%
+  select(-results)
+
+
+
+
+
 
 set.seed(2022)
-simulation_study <- expand_grid(mu = 500, lambda = 3:5, sigma = 1:3/10, sim = 1:1000) %>% 
+simulation_study <- expand_grid(mu = 500, lambda = 2:4, sigma = 1:3/10, sim = 1:1000) %>% 
+  rowwise() %>%
+  mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
+  mutate(MLE = results[[1]], 
+         Mean = results[[2]], 
+         Fisher = results[[3]], 
+         NTrue = results[[4]], 
+         NObs = results[[5]], 
+         NObsTrue = results[[6]]) %>%
+  select(-results)
+
+simulation_study %>%
+  write.csv("data/NaiveSimulation2")
+
+
+
+set.seed(2022)
+simulation_study_small_sigma <- expand_grid(mu = 500, lambda = 2:4, sigma = 1:3/40, sim = 1:1000) %>% 
+  rowwise() %>%
+  mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
+  mutate(MLE = results[[1]], 
+         Mean = results[[2]], 
+         Fisher = results[[3]], 
+         NTrue = results[[4]], 
+         NObs = results[[5]], 
+         NObsTrue = results[[6]]) %>%
+  select(-results)
+
+
+
+
+
+
+
+set.seed(2022)
+LambdaEqualsTwo <- expand_grid(mu = 500, lambda = 2, sigma = 1:3/10, sim = 1:1000) %>% 
   rowwise() %>%
   mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
   mutate(MLE = results[[1]], Mean = results[[2]], Fisher = results[[3]]) %>%
   select(-results)
 
-simulation_study %>%
-  write.csv("data/NaiveSimulation1")
+
+LambdaEqualsTwo %>%
+  write.csv("data/NaiveSimulation1Lambda2")
+
+
+
+
+
+
+
 
 
 

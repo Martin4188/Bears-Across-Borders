@@ -3,44 +3,15 @@ Bears Across Borders
 Martin Andersson
 2022-01-29
 
-``` r
-NaiveSimulation <- read_csv("data/NaiveSimulation1")
-```
+Graphs for the Naive Simulation.
 
-    ## New names:
-    ## * `` -> ...1
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
 
-    ## Rows: 9000 Columns: 8
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-6.png)<!-- -->
 
-    ## -- Column specification --------------------------------------------------------
-    ## Delimiter: ","
-    ## dbl (8): ...1, mu, lambda, sigma, sim, MLE, Mean, Fisher
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-    ## 
-    ## i Use `spec()` to retrieve the full column specification for this data.
-    ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
-NaiveSimulation %>%
-  group_by(lambda, sigma) %>%
-  mutate(MLEBias = abs(lambda - MLE), MeanBias = abs(lambda - Mean)) %>%
-  summarise(MLE = mean(MLE), Mean = mean(Mean), Fisher = mean(Fisher), MLEBias = mean(MLEBias), MeanBias = mean(MeanBias)) %>%
-  kable()
-```
-
-    ## `summarise()` has grouped output by 'lambda'. You can override using the `.groups` argument.
-
-| lambda | sigma |      MLE |     Mean |    Fisher |   MLEBias |  MeanBias |
-|-------:|------:|---------:|---------:|----------:|----------:|----------:|
-|      3 |   0.1 | 2.522731 | 3.668154 | 0.0739489 | 0.4772685 | 0.6681542 |
-|      3 |   0.2 | 2.147131 | 3.353964 | 0.0655808 | 0.8528692 | 0.3539639 |
-|      3 |   0.3 | 1.842418 | 3.068198 | 0.0588417 | 1.1575816 | 0.0916210 |
-|      4 |   0.1 | 3.307682 | 4.559242 | 0.0791524 | 0.6923185 | 0.5592425 |
-|      4 |   0.2 | 2.784925 | 4.146991 | 0.0689373 | 1.2150750 | 0.1549855 |
-|      4 |   0.3 | 2.375321 | 3.759442 | 0.0610733 | 1.6246787 | 0.2415091 |
-|      5 |   0.1 | 4.063403 | 5.451041 | 0.0843424 | 0.9365970 | 0.4510412 |
-|      5 |   0.2 | 3.384433 | 4.924717 | 0.0721564 | 1.6155667 | 0.1126374 |
-|      5 |   0.3 | 2.876683 | 4.451993 | 0.0631377 | 2.1233174 | 0.5480072 |
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ``` r
 #map %>% ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
@@ -49,7 +20,52 @@ NaiveSimulation %>%
 #  labs(title = "Territory Size")
 ```
 
-Simulation
+***Introduction***
+
+For several years now the population size and trends of brown bears in
+four regions of Sweden have been monitored. The total population and how
+it changes over time is important for conservation efforts and the
+setting of hunting quotas. The monitoring and estimation of the bear
+population is done through the collection of scat samples. The
+collection is done by volunteers and genotypes are identified through
+dna analysis and used to get an estimate of the number of bears from
+which a scat sample has been obtained.
+
+The estimation of the total bear population was modeled using the
+Capture-Mark-Recapture method. A full explanation of the methods used
+can be found in Kindberg2011
+
+The collection of spill samples takes place over 5 years in which spill
+samples are collected in one region each year in order with the fifth
+year is an offyear when no collection takes place. The samples are
+collected over 11 weeks in which the volunteers notes down the location
+of the spill and collects a small piece to send in for dna analysis.
+
+Region 1 consists of both Gävleborg and Dalarna,Region 2 is
+Västerbottenslän, Region 3 consists of both Västernorrlandslän and
+Jämtland , and Region 4 is Norrbottenslän
+
+A problem with the division of Sweden into Regions in this way is that
+brown bears do not care for these arbitrary borders. A bear could be
+found on one side of the border one year and the other in another year.
+Should this happen the bear would be counted twice for the census which
+introduces bias to the estimation. The intention of this thesis is to
+study the bias introduced by this border problem and analyzing whether
+it is possible to make adjustments to account for this bias.
+
+We assume that each bear has a territory of some shape with a
+centerpoint. The centerpoints location determines which region a bear
+belongs to. The shape of a bears territory is going to depend on a lot
+of factors such as the geopraphy in the area and the age and condition
+of the animal in question. Furthermore male and female bears behave
+differently with some young male bears not sticking to any one area and
+just wandering in whichever direction strikes their fancy. Trying to
+estimate a territory unique for each bear using only samples of their
+spill is very difficult further complicated by a large number of bears
+for which only a single sample has been discovered and an unknown number
+of bears for which no spill samples were found at all. As such we have
+chosen to assume that each female bear has the same shaped territory and
+likewise for the male bears. The chosen shape is
 
 Introduction
 
@@ -140,7 +156,7 @@ on which side of the border.
 
 *Discussion*
 
--Try to collect samples from outside Sweden as well.
+-   
 
 *References*
 
