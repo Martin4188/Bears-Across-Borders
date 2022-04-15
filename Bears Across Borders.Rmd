@@ -12,8 +12,37 @@ library(knitr)
 options(dplyr.summarise.inform=F)
 
 NaiveSimulation <- read_csv("data/NaiveSimulation2")
+AlternateSimulation <- read_csv("data/SimulationStudyAlternative1")
 #source("Bears Script.R")
 ```
+
+
+
+
+
+```{r}
+One <- NaiveSimulation %>%
+  mutate(Type = "Naive")
+
+AlternateSimulation %>%
+  mutate(Type = "Alternative") %>%
+  full_join(One) %>%
+  select(lambda, sigma, MLE, NTrue, NObs, NObsTrue, Type) %>%
+  filter(lambda == 4) %>%
+  group_by(lambda, sigma, Type) %>%
+  summarise(MLE = mean(MLE), NObs = mean(NObs), NTrue = mean(NTrue), NObsTrue = mean(NObsTrue)) %>%
+  mutate(NObsFalse = NObs - NObsTrue) %>%
+  mutate(estimate = (NObs - NObsFalse) / (1 - exp(-MLE))) %>%
+  mutate(bias = estimate - 500) %>%
+  arrange(Type)
+```
+
+
+
+
+
+
+
 
 
 Graphs for the Naive Simulation.
@@ -125,6 +154,16 @@ NHatBiasBase %>%
   
 ```
 
+```{r}
+#False Bears and True 0 Bears taking each other out. (Using NObs as an estimator).
+
+NaiveSimulation %>%
+  select(lambda, sigma, NTrue, NObs, NObsTrue) %>%
+  mutate(NObsFalse = NObs - NObsTrue,
+         NTrueZero = NTrue - NObsTrue,
+         MutualDestruction = NObsFalse - NTrueZero)
+```
+
 
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
@@ -214,22 +253,130 @@ FactorErrorBase %>%
 
 
 ***Introduction***
+$\lambda$
 
+###EXPLAINING THE BEAR INVENTORY
 For several years now the population size and trends of brown bears in four regions of Sweden have been monitored.
-The total population and how it changes over time is important for conservation efforts and the setting of hunting quotas.
-The monitoring and estimation of the bear population is done through the collection of scat samples. The collection is done by volunteers and genotypes are identified through dna analysis and used to get an estimate of the number of bears from which a scat sample has been obtained.
+The total population and how it changes over time is important for conservation efforts and the setting of hunting quotas. If the hunting quotas are too large the survival of the brown bear species could be in jeopardy. On the opposite if it is too low the population could grow large enough to cause problems in the eco system or for the local human population.
 
-The estimation of the total bear population was modeled using the Capture-Mark-Recapture method. A full explanation of the methods used can be found in Kindberg2011 
+###HOW IT WAS COLLECTED
+The monitoring and estimation of the bear population is done through the collection of scat samples. The collection is done by volunteers and genotypes are identified through dna analysis and used to get an estimate of the number of bears from which a scat sample has been obtained. We also expect that for a certain number of bears no samples will be found and as such the population of such bears must be estimated statistically.
 
-The collection of spill samples takes place over 5 years in which spill samples are collected in one region each year in order with the fifth year is an offyear when no collection takes place. The samples are collected over 11 weeks in which the volunteers notes down the location of the spill and collects a small piece to send in for dna analysis.
+The collection of spill samples takes place over 5 years in which spill samples are collected in one region each year in order with the fifth year is an off year when no collection takes place. The samples are collected over 11 weeks in which the volunteers notes down the location of the spill and collects a small piece to send in for DNA analysis.
 
 Region 1 consists of both Gävleborg and Dalarna,Region 2 is Västerbottenslän, Region 3 consists of both Västernorrlandslän and Jämtland ,  and Region 4 is Norrbottenslän
 
+The estimation of the total bear population was previously modeled using the Capture-Mark-Recapture method. A full explanation of the methods used can be found in Kindberg2011.
+
+###PROBLEMS
 A problem with the division of Sweden into Regions in this way is that brown bears do not care for these arbitrary borders.
-A bear could be found on one side of the border one year and the other in another year. Should this happen the bear would be counted twice for the census which introduces bias to the estimation. The intention of this thesis is to study the bias introduced by this border problem and analyzing whether it is possible to make adjustments to account for this bias. 
+A bear could be found on one side of the border one year and the other in another year. Should this happen the bear would be counted twice for the census of the total population in Sweden which introduces bias to the estimation. 
+
+Another problem with this is deciding which region a bear belongs to. One could assume that each bear has a territory throughout which it wanders regularly. Whichever region contains the largest share of this territory or that contains the territories midpoint could be considered the bears home region. Another method would be counting the bear as the ratio of its territory that lies within each region. 
+
+Male brown bears, especially young ones are known to wander freely and it is not unthinkable that their territory changes dramatically between years. 
+
+Trying to estimate a bears territory only using the location of scat samples is difficult. For bears which only a single sample has been found you can only get a rough idea of where that bears territory is located. For the bears that no samples were discovered there is no way to assign them a territory.
+
+Another complication with the border problem is how it affects the numbers of samples found for each bear. To estimate the number of bears for which zero samples are found the rate at which samples are found needs to be estimated. The rate is assumed to be constant for each bear but due to the way the collection of samples is performed only samples inside the region currently being sampled can be found. As such a bear that has its territory close to the border is going to have their samples found at a lower rate causing bias in the estimation of the rate and therefore also in the estimation of the number of bears with zero samples found.
+
+The impact of these various sources of bias on the estimate of the bear populations do vary depending on what the actual rate of samples found and the size of the bears territories are. Should the rate of found samples be very high the number of bears for which zero samples are found will be close to zero. If bears have very small territories then the probability that a bears territory will span several regions is also very low.  
+
+###HOW TO INVESTIGATE PROBLEMS
+
+To analyse how the border problem affects the estimation of the bear population we have performed a simulation study.
+By simulating a random number of bears over a created region and varying the rate at which samples are found and the size of bears territories the bias can be measured and illustrated.
+
+###CONCLUSIONS
+
+The largest share of the bias is causes by the size of the bears territories.
 
 
-We assume that each bear has a territory of some shape with a centerpoint. The centerpoints location determines which region a bear belongs to. The shape of a bears territory is going to depend on a lot of factors such as the geopraphy in the area and the age and condition of the animal in question. Furthermore male and female bears behave differently with some young male bears not sticking to any one area and just wandering in whichever direction strikes their fancy. Trying to estimate a territory unique for each bear using only samples of their spill is very difficult further complicated by a large number of bears for which only a single sample has been discovered and an unknown number of bears for which no spill samples were found at all. As such we have chosen to assume that each female bear has the same shaped territory and likewise for the male bears. The chosen shape is 
+
+
+
+
+
+
+
+
+
+
+
+***Method***
+
+*What tools are we going to use:*
+
+*Statistical models and assumptions.*
+
+*How are we going to estimate parameters?*
+
+*Do we need numerical methods?*
+
+
+***Method***
+
+We will be using the R language with RStudio to perform all calculations.
+The package tidyverse will be used for data management.
+
+###STATISTICAL MODELS AND ASSUMPTIONS
+
+For any area we are performing an inventory on $S$, we define the area that lies within distance $l$ from the border of $S$ as $O$ and $W$ as the union of $S$ and $O$. Both $S$ and $O$ have different bear populations but with the same population density. 
+
+The number of samples that each bear $b_i$ leaves is $K_i \sim Poisson(\lambda_0)$. Each sample $k_{ij}$ has a location that is bivariate normally distributed $N(\textbf \mu_{i}, \sigma I)$ where . We assume the distribution function for this bivariate normal distribution $T_i$ to be the shape of the bears territory. The bear spends more time closer to the midpoint than further away from it.
+
+If $k_{ij} \in S$ then it will be observed with probability $p$ and if $k_{ij} \not\in S$ then the probability of it being observed is zero. Let $I_i = \int_{S}T_id \textbf x$ then the number of samples that $b_i$ leaves inside $S$ is $K_{Si} \sim Poisson(I_i\lambda_0)$ distributed. Since these samples are only observed with probability $p$ the distribution for the number of samples observed by $b_i$ is binomially distributed $B(K_{Si}, p)$ which is a conditional distribution. The binomial distribution where the number of repetitions is conditioned on the outcome of a poisson distributed variable is also poisson distributed so $B(K_{Si}, p) \sim Poisson(pI_i\lambda_0)$. As we are not specifically interested in neither $p$ nor $lambda_0$ we can replace $p\lambda_0$ with $\lambda$ and focus on the rate at which samples are observed. Therefore the number of observed samples left by $b_i$ is $O_i \sim Poisson(I_i \lambda)$.
+
+###HOW IT IS SIMULATED
+
+For this simulation $W$ is a 9 x 9 square with center in origo of the two dimensional Cartesian plane and $S$ is the 2 x 2 square centred around origo. We want $S$ and $O$ to have the same average population density and since $S$ has an area of 4 square units and $W$ has an area of 36 that is 9 times larger we simulate the population of $W$ from a $poisson(9 \mu)$ distribution where $\mu$ is the mean population size of $S$. The reason the poisson distribution was chosen for the population size is because for large mean the distribution is close to a normal distribution but discrete.
+
+To keep it simple the bears are uniformly distributed throughout $W$. As such each simulated bear $b_i$ has a territory midpoint  $\mu_i = (X_i, Y_i) \sim (U_{-3,3}, U_{-3,3})$. 
+
+###HOW IT IS OBSERVED
+
+We will be using the R language with RStudio to perform all calculations.
+The package tidyverse will be used for data management.
+
+
+
+For our model We assume that each bear expels a poisson distributed number of samples. For each sample expelled the probability that it will be observed is p. This is a conditional distribution that is poisson(p*lambda) or since we are not really interested in either p or lambda we can see the number of observed samples as poisson(lambda) distributed. The coordinate that the sample is expelled at is bivariate normally distributed with mean equal to the bears midpoint and covariance matrix equal to a unit matrix multiplied by sigma. A sample can only be observed if it is expelled inside of S. Let I be the integral of the bivariate normal distribution with midpoint (x,y) and variance sigma over S, then the number of observed spills of bear i is 
+
+$ poisson(I \lambda ) distributed $
+
+The method used to estimate the population does not take any of this into account. Any bear observed is assumed to belong to S and that the distribution of observed samples is poisson(lambda distributed).
+
+To Estimate the bias from counting the bears whose midpoint do not lie within S and the bias from estimating lambda without taking into account the ratio of a bears territory that lies within S we have performed a simulation study.
+
+SIMULATION
+
+For this simulation W is a 9 x 9 square centred within origo of the two dimensional Cartesian plane and S is the 2 x 2 square centred around origo. We want S and O to have the same average population density and since S has an area of 4 square units and O has an area of 36 that is 9 times larger we simulate from a poisson(9 mu) distribution where mu is the average population of S. The bears generated for W have their midpoint coordinates simulated as (U_x, U_y) where U is U(-3, 3) distributed. For each bear simulated the number of spills that the bear leaves is simulated from a poisson(lambda) distribution. Each sample has its coordinates simulated from a bivariate normal distribution with mean equal to the midpoint of the bear who expelled it and variance sigma.
+
+Any bear whose midpoint is more than 3 sigma in distance from the border of S is removed as the probability that a sample from such a bear will show up inside S is negligible. Any sample whose coordinates are not in S are removed as they cannot be observed.
+
+For the simulation we try different values of lambda, sigma and mu and run simulations of 1000 populations for each combination of parameter values.
+
+Since we cannot observe the bears for who zero samples are the number of bears that are observed follow a zero truncated poisson distribution. Using the distribution function for this distribution we can numerically estimate the maximum likelihood estimate using the optim function in R. Once we have the estimate of lambda we can estimate the number of bears for who zero spills are discovered.
+
+During the simulation the number of observed bears who belong to S is counted.
+
+
+*Results*
+
+
+
+
+
+*Discussion*
+
+-
+
+*References*
+
+-bibtex file
+
+
+
 
 
 
