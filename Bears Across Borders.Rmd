@@ -14,14 +14,46 @@ options(dplyr.summarise.inform=F)
 NaiveSimulation <- read_csv("data/NaiveSimulation2")
 NaiveSimulationSmallSigma <- read_csv("data/NaiveSimulationSmallSigma")
 AlternateSimulation <- read_csv("data/SimulationStudyAlternative1")
-#source("Bears Script.R")
+source("Bears Script.R")
 ```
+
+```{r, echo=FALSE}
+print("Sigma = 0.025")
+include_graphics("ImageData/Sigma0point025.png")
+
+print("Sigma = 0.1")
+include_graphics("ImageData/Sigma0point1.png")
+
+print("Sigma = 0.2")
+include_graphics("ImageData/Sigma0point2.png")
+
+print("Sigma = 0.3")
+include_graphics("ImageData/Sigma0point3.png")
+
+Figure1
+Figure2
+Figure3
+Figure4
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ***Introduction***
 
 ***EXPLAINING THE BEAR INVENTORY***
 
-For several years now the population size and trends of brown bears in four regions of Sweden have been monitored.
+For several years now the population size and trends of brown bears in four regions of Sweden have and continues to be monitored.
 The total population and how it changes over time is important for conservation efforts and the setting of hunting quotas. If the hunting quotas are too large the survival of the brown bear species could be in jeopardy. On the opposite if it is too low the population could grow large enough to cause problems in the eco system or for the local human population.
 
 ***HOW IT WAS COLLECTED***
@@ -32,7 +64,7 @@ The collection of spill samples takes place over 5 years in which spill samples 
 
 Region 1 consists of both Gävleborg and Dalarna,Region 2 is Västerbottenslän, Region 3 consists of both Västernorrlandslän and Jämtland ,  and Region 4 is Norrbottenslän
 
-The estimation of the total bear population was previously modeled using the Capture-Mark-Recapture method. A full explanation of the methods used can be found in Kindberg2011.
+The estimation of the total bear population is currently modeled using the Capture-Mark-Recapture method. A full explanation of the methods used can be found in Kindberg2011.
 
 ***PROBLEMS***
 
@@ -56,7 +88,11 @@ By simulating a random number of bears over a created region and varying the rat
 
 ***CONCLUSIONS***
 
-The largest share of the bias is caused by the size of the bears territories.
+Using the simulation study we concluded that the bias in the population estimate scales close to linearly with the size of the bears territories. For very small territories the population estimate exceeds the true population by somewhere between 5 and 10 percent with only minor differences in bias for different simulated rates of discovered samples. Should however the territory be much larger the population estimate could exceed the true population by over 60%.
+
+The main source of this bias comes from the bears from outside the inventoried region. The amount of bears from outside that are observed grow as territory sizes grow and the among all observed bears between 5 to 40% of them could be from outside. The amount of outside bears also increases noticeably as the rate of found samples increase.
+
+Estimating the rate at which samples are left by bears was found to be biased as well. As the rate of samples found and as the bears territories increase, the bias in the estimate increase as well. Since we can't get an accurate estimate of this rate it is difficult to estimate the population estimate bias from a real world sample in which the rate is unknown.
 
 
 ***Method***
@@ -98,7 +134,7 @@ Since we measure the true value of $N$ we can measure the bias $\hat N - N$ and 
 
 For the simulation values of $\lambda$ and $\sigma$, values close to the ones observed for the bear census were used.
 
-For $\lambda$ we use values 2, 3 and 4 and for $\sigma$ we use 0.1, 0.2 and 0.3.
+For $\lambda$ we use values 2, 3 and 4 and for $\sigma$ we use 0.025, 0.05, 0.075, 0.1, 0.2 and 0.3.
 
 
 ***Results***
@@ -108,41 +144,17 @@ In Figure 1 we can see how the bias in the population estimate bias grows seemin
 
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-NaiveSimulation %>%
-  full_join(NaiveSimulationSmallSigma) %>%
-  select(lambda, sigma, MLE, NObs, NTrue) %>%
-  mutate(PopEstimate = NObs / (1 - exp(-MLE)),
-         bias = PopEstimate - NTrue,
-         relativeBias = bias / NTrue) %>%
-  select(lambda, sigma, PopEstimate, bias, relativeBias) %>%
-  group_by(lambda, sigma) %>%
-  summarise(SE = sd(PopEstimate),
-            across(where(is.numeric), mean)) %>%
-  select(-PopEstimate) %>%
-  pivot_longer(SE:relativeBias, names_to = "metric")  %>%
-  mutate(lambda = lambda %>% as.factor()) %>%
-  ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
-  facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 1: Population estimate mean bias and standard error. (small sigma)", x = "Sigma", y = "")
+#Bias and standard error of the population estimate.
 
+Figure1
 
+```
 
+```{r, echo = FALSE}
+#Figure 2: Mean number of false bears
 
-NaiveSimulation %>%
-  select(lambda, sigma, MLE, NObs, NTrue) %>%
-  mutate(PopEstimate = NObs / (1 - exp(-MLE)),
-         bias = PopEstimate - NTrue,
-         relativeBias = bias / NTrue) %>%
-  select(lambda, sigma, PopEstimate, bias, relativeBias) %>%
-  group_by(lambda, sigma) %>%
-  summarise(SE = sd(PopEstimate),
-            across(where(is.numeric), mean)) %>%
-  select(-PopEstimate) %>%
-  pivot_longer(SE:relativeBias, names_to = "metric")  %>%
-  mutate(lambda = lambda %>% as.factor()) %>%
-  ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
-  facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 1: Population estimate mean bias and standard error.", x = "Sigma", y = "")
+Figure2
+
 ```
 
 
@@ -151,28 +163,35 @@ NaiveSimulation %>%
 
 ***Discussion***
 
+# What conclusions can we draw from results?
+# Future directions for research.
+
 The model used to reach these conclusions are based on several simplifying assumptions. The assumption that bears have clearly defined territories is doubtful specifically for the male bears. 
 
 A possible way to identify bears from outside the region that is being censused would be to extend the search for samples some distance outside the region.
+
+As the collection is done by volunteers we only have samples collected from where they went. As such the border of the region being inventoried is not neccesarily the regions borders but the border of the area that at least one volunteer has passed through.
 
 
 ***Appendix***
 
 ```{r, echo =FALSE}
 #MLE bias and standard error
-NaiveSimulation %>%
-  select(lambda, sigma, MLE) %>%
-  mutate(bias = MLE - lambda,
-         SQRTMSE = sqrt((MLE - lambda)^2)) %>%
-  group_by(lambda, sigma) %>%
-  summarise(SE = sd(MLE),
-            across(where(is.numeric), mean)) %>%
-  pivot_longer(c(SE, bias), names_to = "metric") %>%
-  mutate(lambda = lambda %>% as.factor()) %>%
-  ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
-  facet_wrap(~metric, scales = "free_y") +
-  labs(title = "MLE bias and standard error.", x = "Sigma", y = "")
+
+Figure3
+
 ```
+
+```{r, echo=FALSE}
+#Estimated ratio of bear population observed
+
+Figure4
+
+```
+
+#Include link to github repository.
+
+https://github.com/Martin4188/Bears-Across-Borders
 
 ***References***
 
@@ -185,5 +204,9 @@ NaiveSimulation %>%
 
 ```{r, echo=FALSE}
 citation()
+citation("tidyverse")
+citation("knitr")
+citation("polyCub")
 ```
+
 

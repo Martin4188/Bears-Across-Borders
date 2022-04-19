@@ -3,17 +3,33 @@ Bears Across Borders
 Martin Andersson
 2022-01-29
 
+    ## [1] "Sigma = 0.025"
+
+![](ImageData/Sigma0point025.png)<!-- -->
+
+    ## [1] "Sigma = 0.1"
+
+![](ImageData/Sigma0point1.png)<!-- -->
+
+    ## [1] "Sigma = 0.2"
+
+![](ImageData/Sigma0point2.png)<!-- -->
+
+    ## [1] "Sigma = 0.3"
+
+![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->
+
 ***Introduction***
 
 ***EXPLAINING THE BEAR INVENTORY***
 
 For several years now the population size and trends of brown bears in
-four regions of Sweden have been monitored. The total population and how
-it changes over time is important for conservation efforts and the
-setting of hunting quotas. If the hunting quotas are too large the
-survival of the brown bear species could be in jeopardy. On the opposite
-if it is too low the population could grow large enough to cause
-problems in the eco system or for the local human population.
+four regions of Sweden have and continues to be monitored. The total
+population and how it changes over time is important for conservation
+efforts and the setting of hunting quotas. If the hunting quotas are too
+large the survival of the brown bear species could be in jeopardy. On
+the opposite if it is too low the population could grow large enough to
+cause problems in the eco system or for the local human population.
 
 ***HOW IT WAS COLLECTED***
 
@@ -35,7 +51,7 @@ Region 1 consists of both Gävleborg and Dalarna,Region 2 is
 Västerbottenslän, Region 3 consists of both Västernorrlandslän and
 Jämtland , and Region 4 is Norrbottenslän
 
-The estimation of the total bear population was previously modeled using
+The estimation of the total bear population is currently modeled using
 the Capture-Mark-Recapture method. A full explanation of the methods
 used can be found in Kindberg2011.
 
@@ -93,8 +109,26 @@ measured and illustrated.
 
 ***CONCLUSIONS***
 
-The largest share of the bias is caused by the size of the bears
-territories.
+Using the simulation study we concluded that the bias in the population
+estimate scales close to linearly with the size of the bears
+territories. For very small territories the population estimate exceeds
+the true population by somewhere between 5 and 10 percent with only
+minor differences in bias for different simulated rates of discovered
+samples. Should however the territory be much larger the population
+estimate could exceed the true population by over 60%.
+
+The main source of this bias comes from the bears from outside the
+inventoried region. The amount of bears from outside that are observed
+grow as territory sizes grow and the among all observed bears between 5
+to 40% of them could be from outside. The amount of outside bears also
+increases noticeably as the rate of found samples increase.
+
+Estimating the rate at which samples are left by bears was found to be
+biased as well. As the rate of samples found and as the bears
+territories increase, the bias in the estimate increase as well. Since
+we can’t get an accurate estimate of this rate it is difficult to
+estimate the population estimate bias from a real world sample in which
+the rate is unknown.
 
 ***Method***
 
@@ -188,7 +222,8 @@ and analyse it.
 For the simulation values of *λ* and *σ*, values close to the ones
 observed for the bear census were used.
 
-For *λ* we use values 2, 3 and 4 and for *σ* we use 0.1, 0.2 and 0.3.
+For *λ* we use values 2, 3 and 4 and for *σ* we use 0.025, 0.05, 0.075,
+0.1, 0.2 and 0.3.
 
 ***Results***
 
@@ -202,9 +237,15 @@ is negligible and all bears will only leave spills inside their own
 region. However for large *σ* the relative bias is quite high with the
 estimate possibly being more than 60% larger than the true population.
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ***Discussion***
+
+# What conclusions can we draw from results?
+
+# Future directions for research.
 
 The model used to reach these conclusions are based on several
 simplifying assumptions. The assumption that bears have clearly defined
@@ -214,9 +255,20 @@ A possible way to identify bears from outside the region that is being
 censused would be to extend the search for samples some distance outside
 the region.
 
+As the collection is done by volunteers we only have samples collected
+from where they went. As such the border of the region being inventoried
+is not neccesarily the regions borders but the border of the area that
+at least one volunteer has passed through.
+
 ***Appendix***
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+#Include link to github repository.
+
+<https://github.com/Martin4188/Bears-Across-Borders>
 
 ***References***
 
@@ -243,3 +295,59 @@ the region.
     ## We have invested a lot of time and effort in creating R, please cite it
     ## when using it for data analysis. See also 'citation("pkgname")' for
     ## citing R packages.
+
+    ## 
+    ##   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open
+    ##   Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Article{,
+    ##     title = {Welcome to the {tidyverse}},
+    ##     author = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},
+    ##     year = {2019},
+    ##     journal = {Journal of Open Source Software},
+    ##     volume = {4},
+    ##     number = {43},
+    ##     pages = {1686},
+    ##     doi = {10.21105/joss.01686},
+    ##   }
+
+    ## 
+    ## To cite the 'knitr' package in publications use:
+    ## 
+    ##   Yihui Xie (2021). knitr: A General-Purpose Package for Dynamic Report
+    ##   Generation in R. R package version 1.34.
+    ## 
+    ##   Yihui Xie (2015) Dynamic Documents with R and knitr. 2nd edition.
+    ##   Chapman and Hall/CRC. ISBN 978-1498716963
+    ## 
+    ##   Yihui Xie (2014) knitr: A Comprehensive Tool for Reproducible
+    ##   Research in R. In Victoria Stodden, Friedrich Leisch and Roger D.
+    ##   Peng, editors, Implementing Reproducible Computational Research.
+    ##   Chapman and Hall/CRC. ISBN 978-1466561595
+    ## 
+    ## To see these entries in BibTeX format, use 'print(<citation>,
+    ## bibtex=TRUE)', 'toBibtex(.)', or set
+    ## 'options(citation.bibtex.max=999)'.
+
+    ## 
+    ## To cite 'polyCub' in publications, please refer to:
+    ## 
+    ## Meyer S (2019). "polyCub: An R package for Integration over Polygons."
+    ## _Journal of Open Source Software_, *4*(34), 1056. ISSN 2475-9066, doi:
+    ## 10.21105/joss.01056 (URL: https://doi.org/10.21105/joss.01056).
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Article{R:polyCub,
+    ##     author = {Sebastian Meyer},
+    ##     title = {{polyCub}: An {R} package for Integration over Polygons},
+    ##     journal = {Journal of Open Source Software},
+    ##     issn = {2475-9066},
+    ##     year = {2019},
+    ##     volume = {4},
+    ##     number = {34},
+    ##     pages = {1056},
+    ##     doi = {10.21105/joss.01056},
+    ##   }
