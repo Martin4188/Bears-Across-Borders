@@ -17,7 +17,7 @@ Martin Andersson
 
     ## [1] "Sigma = 0.3"
 
-![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->
+![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-9.png)<!-- -->
 
 ***Introduction***
 

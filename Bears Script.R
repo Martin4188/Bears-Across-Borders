@@ -5,13 +5,13 @@ library(polyCub)
 library(VGAM)
 options(dplyr.summarise.inform=F)
 
-NaiveSimulation <- read_csv("data/NaiveSimulation2")
+NaiveSimulation <- read_csv("data/NaiveSimulation")
 NaiveSimulationSmallSigma <- read_csv("data/NaiveSimulationSmallSigma")
 
 #Figure 1: Bias and standard error of the population estimate.
 Figure1 <- NaiveSimulation %>%
   full_join(NaiveSimulationSmallSigma, 
-            by = c("...1", "mu", "lambda", "sigma", "sim", "MLE", "Mean", "Fisher", "NTrue", "NObs", "NObsTrue")) %>%
+            by = c("...1", "mu", "lambda", "sigma", "sim", "MLE", "Mean", "Fisher", "NTrue", "NObs", "NObsTrue", "SigmaHat")) %>%
   select(lambda, sigma, MLE, NObs, NTrue) %>%
   mutate(PopEstimate = NObs / (1 - exp(-MLE)),
          bias = PopEstimate - NTrue,
@@ -53,9 +53,28 @@ Figure2 <- NaiveSimulation %>%
   labs(title = "Figure 2: Mean number of observed false bears", x = "Sigma", y = "")
 
 
+#Figure 3 Sigma bias and standard error
 
-#Figure 3: MLE bias and standard error
 Figure3 <- NaiveSimulation %>%
+  full_join(NaiveSimulationSmallSigma, 
+            by = c("...1", "mu", "lambda", "sigma", "sim", "MLE", "Mean", "Fisher", "NTrue", "NObs", "NObsTrue", "SigmaHat")) %>%
+  select(lambda, sigma, SigmaHat) %>%
+  mutate(bias = SigmaHat - sigma,
+         relativeBias = bias / sigma) %>%
+  group_by(lambda, sigma) %>%
+  summarise(SE = sd(SigmaHat),
+            across(where(is.numeric), mean)) %>%
+  mutate(lambda = lambda %>% as.factor()) %>%
+  rename('Bias' = bias,
+         'Relative Bias' = relativeBias,
+         'Standard Error' = SE) %>%
+  pivot_longer(c('Standard Error', 'Bias', 'Relative Bias'), names_to = "metric") %>%
+  ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
+  facet_wrap(~metric, scales = "free_y") +
+  labs(title = "Figure 3: Bias and standard error of estimate of sigma.", x = "Sigma", y = "")
+
+#Figure 4: MLE bias and standard error
+Figure4 <- NaiveSimulation %>%
   full_join(NaiveSimulationSmallSigma, 
             by = c("...1", "mu", "lambda", "sigma", "sim", "MLE", "Mean", "Fisher", "NTrue", "NObs", "NObsTrue")) %>%
   select(lambda, sigma, MLE) %>%
@@ -73,13 +92,13 @@ Figure3 <- NaiveSimulation %>%
   pivot_longer(c('Standard Error', 'Bias', 'Relative Bias'), names_to = "metric") %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 3: Bias and standard error of the maximum likelihood estimate of lambda.", x = "Sigma", y = "")
+  labs(title = "Figure 4: Bias and standard error of the maximum likelihood estimate of lambda.", x = "Sigma", y = "")
 
 
 
-#Figure 4: Estimated ratio of bear population observed
+#Figure 5: Estimated ratio of bear population observed
 
-Figure4 <- NaiveSimulation %>%
+Figure5 <- NaiveSimulation %>%
   full_join(NaiveSimulationSmallSigma, 
             by = c("...1", "mu", "lambda", "sigma", "sim", "MLE", "Mean", "Fisher", "NTrue", "NObs", "NObsTrue")) %>%
   select(lambda, sigma, MLE, NTrue, NObs, NObsTrue) %>%
@@ -99,7 +118,7 @@ Figure4 <- NaiveSimulation %>%
   mutate(lambda = lambda %>% as.factor()) %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 4: Bias and standard error for the estimated ratio of bear population observed.", x = "Sigma", y = "")
+  labs(title = "Figure 5: Bias and standard error for the estimated ratio of bear population observed.", x = "Sigma", y = "")
 
 
 #Visualizing sigma

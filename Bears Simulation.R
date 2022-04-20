@@ -121,7 +121,7 @@ NaiveSimulationFunction <- function(mu, lambda, sigma){
 }
 
 set.seed(2022)
-WithSigma <- expand_grid(mu = 500, lambda = 4, sigma = 3/10, sim = 1:100) %>% 
+WithSigma1 <- expand_grid(mu = 500, lambda = 2:4, sigma = 1:3/10, sim = 1:1000) %>% 
   rowwise() %>%
   mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
   mutate(MLE = results[[1]], 
@@ -132,6 +132,35 @@ WithSigma <- expand_grid(mu = 500, lambda = 4, sigma = 3/10, sim = 1:100) %>%
          NObsTrue = results[[6]],
          SigmaHat = results[[7]]) %>%
   select(-results)
+
+
+set.seed(2022)
+WithSigma2 <- expand_grid(mu = 500, lambda = 2:4, sigma = 1:3/40, sim = 1:1000) %>% 
+  rowwise() %>%
+  mutate(results = NaiveSimulationFunction(mu, lambda, sigma)) %>%
+  mutate(MLE = results[[1]], 
+         Mean = results[[2]], 
+         Fisher = results[[3]], 
+         NTrue = results[[4]], 
+         NObs = results[[5]], 
+         NObsTrue = results[[6]],
+         SigmaHat = results[[7]]) %>%
+  select(-results)
+
+
+WithSigma1 %>%
+  write.csv("data/NaiveSimulation")
+
+WithSigma2 %>%
+  write.csv("data/NaiveSimulationSmallSigma")
+
+
+
+
+
+
+
+
 
 
 set.seed(2022)

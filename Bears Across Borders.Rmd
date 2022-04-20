@@ -11,9 +11,9 @@ library(tidyverse)
 library(knitr)
 options(dplyr.summarise.inform=F)
 
-NaiveSimulation <- read_csv("data/NaiveSimulation2")
+NaiveSimulation <- read_csv("data/NaiveSimulation")
 NaiveSimulationSmallSigma <- read_csv("data/NaiveSimulationSmallSigma")
-AlternateSimulation <- read_csv("data/SimulationStudyAlternative1")
+
 source("Bears Script.R")
 ```
 
@@ -34,6 +34,7 @@ Figure1
 Figure2
 Figure3
 Figure4
+Figure5
 ```
 
 
