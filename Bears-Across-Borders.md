@@ -17,7 +17,7 @@ Martin Andersson
 
     ## [1] "Sigma = 0.3"
 
-![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-9.png)<!-- -->
+![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-9.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-10.png)<!-- -->
 
 ***Introduction***
 
@@ -142,21 +142,24 @@ that lies within distance *l* from the border of *S* as *O* and *W* as
 the union of *S* and *O*. Both *S* and *O* have different bear
 populations but with the same population density.
 
-The number of samples that each bear *b*<sub>*i*</sub> leaves is
-*K*<sub>*i*</sub> ∼ *P**o**i**s**s**o**n*(*λ*<sub>0</sub>). Each sample
-*k*<sub>*i**j*</sub> has a location that is bivariate normally
-distributed $N(\\textbf \\mu\_{i}, \\sigma I)$ where . We assume the
-distribution function for this bivariate normal distribution
-*T*<sub>*i*</sub> to be the shape of the bears territory. The bear
-spends more time closer to the midpoint than further away from it.
+The number of samples that bear number *i* leaves is
+*K*<sub>*i*</sub> ∼ *P**o**i**s**s**o**n*(*λ*<sub>0</sub>). For each
+bear that has had a sample observed the sample
+*k*<sub>*i**j*</sub>, *j* = 1, ..., .*n* has a location that is
+bivariate normally distributed $N(\\textbf \\mu\_{i}, \\sigma I)$ and we
+let $T_i(\\textbf x)$ be the probability distribution function for this
+distribution. We also use *T*<sub>*i*</sub> to describe bear *i*’s
+territory. The amount of time that a bear spends during the inventory
+period in any area *A* is
+$\\int\_{A}^{} T_i(\\textbf x) \\,{d \\textbf x}$.
 
 If *k*<sub>*i**j*</sub> ∈ *S* then it will be observed with probability
 *p* and if *k*<sub>*i**j*</sub> ∉ *S* then the probability of it being
 observed is zero. Let $I_i = \\int\_{S}T_id \\textbf x$ then the number
-of samples that *b*<sub>*i*</sub> leaves inside *S* is
+of samples that bear number *i* leaves inside *S* is
 *K*<sub>*S**i*</sub> ∼ *P**o**i**s**s**o**n*(*I*<sub>*i*</sub>*λ*<sub>0</sub>)
 distributed. Since these samples are only observed with probability *p*
-the distribution for the number of samples observed by *b*<sub>*i*</sub>
+the distribution for the number of samples observed by bear number *i*
 is binomially distributed *B*(*K*<sub>*S**i*</sub>,*p*) which is a
 conditional distribution. The binomial distribution where the number of
 repetitions is conditioned on the outcome of a poisson distributed
@@ -165,28 +168,27 @@ variable is also poisson distributed so
 As we are not specifically interested in neither *p* nor
 *l**a**m**b**d**a*<sub>0</sub> we can replace *p**λ*<sub>0</sub> with
 *λ* and focus only on the rate at which samples are observed. Therefore
-the number of observed samples left by *b*<sub>*i*</sub> is
+the number of observed samples left by bear number *i* is
 *O*<sub>*i*</sub> ∼ *P**o**i**s**s**o**n*(*I*<sub>*i*</sub>*λ*).
 
 ***HOW IT IS SIMULATED***
 
-For this simulation *W* is a 9 x 9 square with center in origo of the
+For this simulation *W* is a 9 x 9 square with centre in origo of the
 two dimensional Cartesian plane and *S* is the 2 x 2 square centred
 around origo. We want *S* and *O* to have the same average population
 density and since *S* has an area of 4 square units and *W* has an area
 of 36 that is 9 times larger we simulate the population of *W* from a
 *p**o**i**s**s**o**n*(9*μ*) distribution where *μ* is the mean
-population size of *S*. The reason the poisson distribution was chosen
-for the population size is because for large mean the distribution is
-close to a normal distribution but discrete.
+population size of *S*.
 
-To keep it simple the bears are uniformly distributed throughout *W*. As
-such each simulated bear *b*<sub>*i*</sub> has a territory midpoint
+For the location of bears midpoints in *W* we choose to use a
+homogeneous poisson process throughout the plane. As such each simulated
+bear number *i* has a territory midpoint
 *μ*<sub>*i*</sub> = (*X*<sub>*i*</sub>,*Y*<sub>*i*</sub>) ∼ (*U*<sub>−3, 3</sub>,*U*<sub>−3, 3</sub>).
 Any bear whose midpoint lies within *S* is marked as a “True Bear” and
 the rest as “False bears.” The total number of “True bears” *N* is what
 we are trying to estimate so for each simulation we include this total.
-For each *b*<sub>*i*</sub> we simulate the number of samples they leave
+For each simulated bear we simulate the number of samples they leave
 from a *P**o**i**s**s**o**n*(*λ*) distribution. Each simulated sample
 then has its location simulated from the bivariate normal distribution
 *N*(*m**u*<sub>*i*</sub>,*σ**I*). Any sample that is not contained in
@@ -199,22 +201,31 @@ been observed is then counted.
 truncated poisson distribution since we cannot observe the bears with
 zero samples observed.
 
-Let *N**O**b**s* be the number of bears observed,
-*N**O**b**s**T**r**u**e* be the number of bears observed whose midpoint
-actually belong to *S* and *N**O**b**s**F**a**l**s**e* be the number of
-bears observed whose midpoint does not belong to *S*.
+Let *N**O**b**s* *N*<sup>obs</sup> be the number of bears observed,
+*N*<sub>*T*</sub><sup>obs</sup> be the number of bears observed whose
+midpoint actually belong to *S* and *N*<sub>*F*</sub><sup>obs</sup> be
+the number of bears observed whose midpoint does not belong to *S*.
 
 The estimate for the total number of bears in *S* is then.
 
-$$\\hat N =\\frac {NObs}{1-e^{\\hat \\lambda}}$$
+$$\\hat N =\\frac {N^{\\text{obs}}}{1-e^{\\hat \\lambda}}$$
 However this is done under the assumption that
-*N**O**b**s* = *N**O**b**s**T**r**u**e*. However in actuality
+*N*<sup>obs</sup> = *N*<sub>*T*</sub><sup>obs</sup>. However in
+actuality
 
-*N**O**b**s* = *N**O**b**s**T**r**u**e* + *N**O**b**s**F**a**l**s**e*
+*N*<sup>obs</sup> = *N*<sub>*T*</sub><sup>obs</sup> + *N*<sub>*F*</sub><sup>obs</sup>
 
 Which means that
 
-$$\\hat N =\\frac {NObsTrue + NObsFalse}{1-e^{\\hat \\lambda}}$$
+$$\\hat N^{\\text{obs}} =\\frac {N^{\\text{obs}}\_T + N^{\\text{obs}}\_F}{1-e^{\\hat \\lambda}}$$
+
+Which we could rewrite as
+
+$$\\hat N^{\\text{obs}} =\\frac {N^{\\text{obs}}\_T + N^{\\text{obs}}\_F}{{N^{\\text{obs}}\_T}}\\frac {N^{\\text{obs}}\_T}{1-e^{\\hat \\lambda}}$$
+
+Which gives us two factors of which the left depends on the problem
+related to the number of false bears observed and the right depends on
+the error in the estimation of *λ*.
 
 Since we measure the true value of *N* we can measure the bias *N̂* − *N*
 and analyse it.
@@ -224,6 +235,64 @@ observed for the bear census were used.
 
 For *λ* we use values 2, 3 and 4 and for *σ* we use 0.025, 0.05, 0.075,
 0.1, 0.2 and 0.3.
+
+***Calculation intensive methods applied to real data.***
+
+The idea with the alternative model is to take the positions of the
+bears into account when making the estimations of the underlying
+parameters. Since the bears territories are binormally distributed,
+estimating how much of the territories lies within a certain region
+requires integrating over some irregularly shaped intersections between
+the territories and the region in question the integrals needs to be
+performed numerically. These numerical methods will then also be used in
+combination with an optimizing functions which causes the calculations
+to take a very large time when they need to be repeated thousands of
+times in a simulation to get an estimate for their effectiveness. As
+such these methods will only be used on the real samples and their
+effect will need to be trusted based on their soundness.
+
+***Application to Real data***
+
+For the real data we assume that all the assumptions of the simulation
+are true. Since male bears are known to wander further than female bears
+and as such would have very different values of *σ* we choose to
+estimate their populations separately. *σ* is estimated by removing all
+bears that only have 1 samples discovered and then using the pooled
+sample variance method. To make comparisons between the real data and
+the simulated data we also want to get a normalized value for them both.
+For this we choose to use $ / $. Since the area in the simulation is 4
+we can use the value of $2\\sigma / \\sqrt{Region Area}$ to make
+comparisons between the real data and the simulation.
+
+The midpoint coordinates of each bear is estimated as the mean of the
+samples lateral and longitudal coordinates. The midpoints are going to
+be biased since all samples are located inside the region so to account
+for that we will apply an optimizing function to each bear. We find the
+midpoint *μ* that optimize the function
+
+$$l(\\mu) = \\sum\_{1}^{n} log(\\phi ((x_i - \\mu) / \\sigma)) / \\int\_{S}^{} \\phi ((x - \\mu) / \\sigma) \\,dx$$
+
+where *x*<sub>*i*</sub> is the location of the bear in questions sample
+*i* and *ϕ* is the standard bivariate normal distribution. The function
+applies a penalty to midpoints further from the border which allows
+midpoints from outside the region in question to be possible outcomes.
+
+After each bears midpoint has been adjusted we can calculate
+*I*<sub>*i*</sub> (The integral of the bears territory over the Region)
+and then get the maximum likelihood estimate for *λ* where each bears
+number of samples found is assumed to be a outcome of
+*P**o**i**s**s**o**n*(*I*<sub>*i*</sub>*λ*<sub>0</sub>).
+
+For the estimate of the bear population we have thought of two different
+methods for the estimate. The first is to simply remove any bear whose
+midpoint was adjusted to lie outside the region and then use *λ̂* to
+estimate the number of bears for which zero samples were discovered. The
+second is instead of summing up the discovered bears, we instead sum up
+*I*<sub>*i*</sub> which means we are counting the fraction of the bears
+estimated territory that lies within the region and assume that the
+remainder 1 − *I*<sub>*i*</sub> belongs to another region. The number of
+bears for which zero samples were found is then estimated the same as in
+the first method.
 
 ***Results***
 
@@ -237,34 +306,112 @@ is negligible and all bears will only leave spills inside their own
 region. However for large *σ* the relative bias is quite high with the
 estimate possibly being more than 60% larger than the true population.
 
+In Figure 2 we see that the mean number of false bears that are observed
+in each sample also grows seemingly linearly with *σ* and again *λ*
+adjusts the slope coefficient. Even for relatively small *σ* the number
+of observed bears that are false can be as large as 10% of the observed
+population.
+
+Using the results of the simulation it would theoretically be possible
+to estimate the bias for any estimation made using this method. However
+to do this we would need to be able to accurately estimate the
+underlying parameters *λ* and *σ*. In figure 3 we can see the bias for
+the pooled sample variance estimate of *σ* and how it varies depending
+on *λ* and *σ*. The magnitude of the relative bias does increase
+linearly with *σ* but for smaller values the estimate is relatively
+close. The bias is seemingly not influenced at all by the value of *λ*.
+
+For the estimate of *λ* we instead choose to look at the bias in the
+transformed version 1/(1−*e*<sup>−</sup>(*λ*)) as it also factor that we
+multiply the number of observed bears with to make our total population
+estimate. We can see from figure 4 how the bias grows in magnitude with
+as *σ* grows. The estimate is also biased for all values of *σ*. Since
+both the estimate for *σ* and *λ* are biased we cannot use the mean bias
+estimated through the simulation to make an exact adjustment of a real
+samples population estimate.
+
 ![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ***Discussion***
 
 # What conclusions can we draw from results?
 
+The bias in the population estimate grows as the parameters of the
+distribution functions used in the simulation *λ* (The rate at which
+samples are found) and *σ* (The size of the bears territories) grows.
+
+This bias can be attributed to the false bears for which samples have
+been observed and to the bias in the estimation of *λ*, However the bias
+introduced by the false bears vastly exceeds the bias from the
+estimation of *λ*.
+
+The mean bias in the population estimate can be seen as a function of
+the underlying parameters *λ* and *σ* that defines the size of a bears
+territory. As such if we could calculate an expression for this bias
+function and knew the values of these parameters for a collection of
+samples we could get an estimate of the bias in that collection. However
+for a real collection of samples these parameters must also be estimated
+first which is a problem since the estimates for them are biased and the
+bias is larger the larger the values for the parameters are.
+
+###Swedish samples
+
+For each of the 4 regions in Sweden *σ* is estimated to lie somewhere
+inbetween 0.05 and 0.08 which from the simulation estimates would
+suggest that the relative bias for the regions lies inbetween 8 and 17
+percent. However the Swedish regions do differ from the simulation in
+certain ways. For example part of each Swedish region borders the Baltic
+Ocean in which brown bears are not known to live. As such the assumption
+that the population density of the outside region is the same as in the
+inside region does not hold for any of the Swedish regions.
+
 # Future directions for research.
 
-The model used to reach these conclusions are based on several
-simplifying assumptions. The assumption that bears have clearly defined
-territories is doubtful specifically for the male bears.
+The mean bias in the population estimate can be seen as a function of
+the underlying parameters *λ* and *σ*. However as these parameters need
+to be estimated and the estimate is biased even if we had an exact
+expression for the mean bias function applying it to a real sample would
+be difficult.
 
-A possible way to identify bears from outside the region that is being
-censused would be to extend the search for samples some distance outside
-the region.
+As the value of the function 1/(1−*e*<sup>−*λ*</sup>) changes slowly
+when *λ* is larger than 3 we
 
-As the collection is done by volunteers we only have samples collected
-from where they went. As such the border of the region being inventoried
-is not neccesarily the regions borders but the border of the area that
-at least one volunteer has passed through.
+The population estimate of the alternative estimation method when
+applied to the Swedish samples did not differ dramatically from the
+normal method that does not take the bears positions into account. This
+could suggest that the border problem is not
+
+###TEST ON SWEDEN
 
 ***Appendix***
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+``` r
+#SwedishResultsTable %>%
+#  kable()
+```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+#Bias in the case only true bears were observed.
+
+FigureX
+```
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+#Function graph for the estimation factor.
+FunctionGraph
+```
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 #Include link to github repository.
 
@@ -350,4 +497,42 @@ at least one volunteer has passed through.
     ##     number = {34},
     ##     pages = {1056},
     ##     doi = {10.21105/joss.01056},
+    ##   }
+
+    ## 
+    ## To cite package sf in publications, please use:
+    ## 
+    ##   Pebesma, E., 2018. Simple Features for R: Standardized Support for
+    ##   Spatial Vector Data. The R Journal 10 (1), 439-446,
+    ##   https://doi.org/10.32614/RJ-2018-009
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Article{,
+    ##     author = {Edzer Pebesma},
+    ##     title = {{Simple Features for R: Standardized Support for Spatial Vector Data}},
+    ##     year = {2018},
+    ##     journal = {{The R Journal}},
+    ##     doi = {10.32614/RJ-2018-009},
+    ##     url = {https://doi.org/10.32614/RJ-2018-009},
+    ##     pages = {439--446},
+    ##     volume = {10},
+    ##     number = {1},
+    ##   }
+
+    ## 
+    ## To cite package 'nngeo' in publications use:
+    ## 
+    ##   Michael Dorman (2022). nngeo: k-Nearest Neighbor Join for Spatial
+    ##   Data. R package version 0.4.5.
+    ##   https://CRAN.R-project.org/package=nngeo
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     title = {nngeo: k-Nearest Neighbor Join for Spatial Data},
+    ##     author = {Michael Dorman},
+    ##     year = {2022},
+    ##     note = {R package version 0.4.5},
+    ##     url = {https://CRAN.R-project.org/package=nngeo},
     ##   }
