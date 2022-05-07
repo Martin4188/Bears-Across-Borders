@@ -9,15 +9,43 @@ Martin Andersson
 
     ## [1] "Sigma = 0.1"
 
-![](ImageData/Sigma0point1.png)<!-- -->
+![](ImageData/Sigma0point1.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-4.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->
 
-    ## [1] "Sigma = 0.2"
+| year | sex   | Standard Estimate | Alt Estimate | Ratio Estimate | Standard Lambda | Alt Lambda | Normalized Sigma |
+|:-----|:------|------------------:|-------------:|---------------:|----------------:|-----------:|-----------------:|
+| 2015 | Hane  |          438.9666 |     437.2374 |       419.2321 |        4.706508 |   4.905714 |        0.0762118 |
+| 2015 | Hona  |          594.2778 |     592.4432 |       569.7841 |        3.801252 |   3.946863 |        0.0574793 |
+| 2015 | Total |         1033.2444 |    1029.6805 |       989.0162 |              NA |         NA |               NA |
+| 2016 | Hane  |          143.5283 |     140.1657 |       136.7642 |        2.438544 |   2.529981 |        0.0654466 |
+| 2016 | Hona  |          225.3331 |     223.2975 |       219.6450 |        2.405327 |   2.448531 |        0.0432451 |
+| 2016 | Total |          368.8614 |     363.4631 |       356.4092 |              NA |         NA |               NA |
+| 2017 | Hane  |          272.2243 |     259.0285 |       248.5888 |        3.188547 |   3.356554 |        0.0669158 |
+| 2017 | Hona  |          390.7397 |     386.9825 |       374.3613 |        3.211857 |   3.320572 |        0.0518495 |
+| 2017 | Total |          662.9639 |     646.0110 |       622.9501 |              NA |         NA |               NA |
+| 2019 | Hane  |          176.2526 |     173.7480 |       165.3290 |        2.025502 |   2.125154 |        0.0915389 |
+| 2019 | Hona  |          228.2444 |     224.1914 |       212.1645 |        1.840133 |   1.940800 |        0.0656059 |
+| 2019 | Total |          404.4969 |     397.9395 |       377.4935 |              NA |         NA |               NA |
+| 2020 | Hane  |          440.1865 |     438.4731 |       422.6845 |        3.434908 |   3.559724 |        0.0657033 |
+| 2020 | Hona  |          764.4728 |     759.9292 |       736.3503 |        3.042619 |   3.138866 |        0.0439210 |
+| 2020 | Total |         1204.6593 |    1198.4023 |      1159.0348 |              NA |         NA |               NA |
 
-![](ImageData/Sigma0point2.png)<!-- -->
-
-    ## [1] "Sigma = 0.3"
-
-![](ImageData/Sigma0point3.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-5.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-6.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-7.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-8.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-9.png)<!-- -->![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-2-10.png)<!-- -->
+| year | sex   | Standard Estimate | Alt Estimate | Ratio Estimate | Simulated Unbiased Estimate | Estimated Simulated Bias | Simulated Bias Estimate |
+|:-----|:------|------------------:|-------------:|---------------:|----------------------------:|-------------------------:|------------------------:|
+| 2015 | Hane  |          438.9666 |     437.2374 |       419.2321 |                    375.1851 |                 63.78148 |                    0.17 |
+| 2015 | Hona  |          594.2778 |     592.4432 |       569.7841 |                    530.6052 |                 63.67262 |                    0.12 |
+| 2015 | Total |         1033.2444 |    1029.6805 |       989.0162 |                    905.7903 |                127.45410 |                      NA |
+| 2016 | Hane  |          143.5283 |     140.1657 |       136.7642 |                    128.1502 |                 15.37803 |                    0.12 |
+| 2016 | Hona  |          225.3331 |     223.2975 |       219.6450 |                    210.5917 |                 14.74142 |                    0.07 |
+| 2016 | Total |          368.8614 |     363.4631 |       356.4092 |                    338.7420 |                 30.11945 |                      NA |
+| 2017 | Hane  |          272.2243 |     259.0285 |       248.5888 |                    240.9064 |                 31.31784 |                    0.13 |
+| 2017 | Hona  |          390.7397 |     386.9825 |       374.3613 |                    358.4768 |                 32.26291 |                    0.09 |
+| 2017 | Total |          662.9639 |     646.0110 |       622.9501 |                    599.3832 |                 63.58075 |                      NA |
+| 2019 | Hane  |          176.2526 |     173.7480 |       165.3290 |                    153.2631 |                 22.98947 |                    0.15 |
+| 2019 | Hona  |          228.2444 |     224.1914 |       212.1645 |                    207.4949 |                 20.74949 |                    0.10 |
+| 2019 | Total |          404.4969 |     397.9395 |       377.4935 |                    360.7580 |                 43.73895 |                      NA |
+| 2020 | Hane  |          440.1865 |     438.4731 |       422.6845 |                    389.5456 |                 50.64092 |                    0.13 |
+| 2020 | Hona  |          764.4728 |     759.9292 |       736.3503 |                    701.3512 |                 63.12161 |                    0.09 |
+| 2020 | Total |         1204.6593 |    1198.4023 |      1159.0348 |                   1090.8968 |                113.76253 |                      NA |
 
 ***Introduction***
 
@@ -29,13 +57,13 @@ population and how it changes over time is important for conservation
 efforts and the setting of hunting quotas. If the hunting quotas are too
 large the survival of the brown bear species could be in jeopardy. On
 the opposite if it is too low the population could grow large enough to
-cause problems in the eco system or for the local human population.
+cause problems in the eco-system or for the local human population.
 
 ***HOW IT WAS COLLECTED***
 
 The monitoring and estimation of the bear population is done through the
 collection of scat samples. The collection is done by volunteers and
-genotypes are identified through dna analysis and used to get an
+genotypes are identified through DNA analysis and used to get an
 estimate of the number of bears from which a scat sample has been
 obtained. We also expect that for a certain number of bears no samples
 will be found and as such the population of such bears must be estimated
@@ -49,15 +77,28 @@ of the spill and collects a small piece to send in for DNA analysis.
 
 Region 1 consists of both Gävleborg and Dalarna,Region 2 is
 Västerbottenslän, Region 3 consists of both Västernorrlandslän and
-Jämtland , and Region 4 is Norrbottenslän
+Jämtland, and Region 4 is Norrbottenslän
 
 The estimation of the total bear population is currently modeled using
-the Capture-Mark-Recapture method. A full explanation of the methods
-used can be found in Kindberg2011.
+the Capture-Mark-Recapture method. Traditionally the
+Capture-Mark-Recapture method involved physically capturing the animals
+in question but with advancements in DNA analysis it is now possible to
+perform the analysis by just “capturing” the DNA of the animals instead.
+While similar the underlying models at work are quite different. When
+collecting scat samples for example there is no beforehand known upper
+limit to the number of “captures” like there might be when using traps.
+A thorough explanation of this “genetic mark-recapture” method we use
+can be found in the article *“A new method for estimating the size of
+small populations from genetic mark–recapture data”* by Miller et
+al.,(2005).
+
+A full explanation of the methods used in the Swedish survey be found in
+*“Estimating population size and trends of the Swedish brown bear Ursus
+arctos population”* Kindberg et al.,(2011).
 
 ***PROBLEMS***
 
-A problem with the division of Sweden into Regions in this way is that
+A problem with the division of Sweden into regions in this way is that
 brown bears do not care for these arbitrary borders. A bear could be
 found on one side of the border one year and the other in another year.
 Should this happen the bear would be counted twice for the census of the
@@ -68,11 +109,9 @@ One could assume that each bear has a territory throughout which it
 wanders regularly. Whichever region contains the largest share of this
 territory or that contains the territories midpoint could be considered
 the bears home region. Another method would be counting the bear as the
-ratio of its territory that lies within each region.
-
-Male brown bears, especially young ones are known to wander freely and
-it is not unthinkable that their territory changes dramatically between
-years.
+ratio of its territory that lies within each region. Male brown bears,
+especially young ones are known to wander freely and it is not
+unthinkable that their territory changes dramatically between years.
 
 Trying to estimate a bears territory only using the location of scat
 samples is difficult. For bears which only a single sample has been
@@ -99,6 +138,13 @@ found will be close to zero. If bears have very small territories then
 the probability that a bears territory will span several regions is also
 very low.
 
+The method capture-recapture methods that take the positions of animals
+into account is referred to as spacial capture-recapture and in this
+case it would specifically be spatial genetic mark-recapture methods. A
+thorough explanation of why and how spatial methods are useful can be
+found in *“Unifying population and landscape ecology with spatial
+capture–recapture”* Royle et al., (2018).
+
 ***HOW TO INVESTIGATE PROBLEMS***
 
 To analyse how the border problem affects the estimation of the bear
@@ -106,6 +152,12 @@ population we have performed a simulation study. By simulating a random
 number of bears over a created region and varying the rate at which
 samples are found and the size of bears territories the bias can be
 measured and illustrated.
+
+The simulation values will be chosen based on the values observed for
+the Swedish survey samples. A calculation heavy method will also be
+utilized on the Swedish survey samples as well to get an alternative
+estimate for the population. which can be compared to the bias observed
+for the simulated samples.
 
 ***CONCLUSIONS***
 
@@ -123,17 +175,26 @@ grow as territory sizes grow and the among all observed bears between 5
 to 40% of them could be from outside. The amount of outside bears also
 increases noticeably as the rate of found samples increase.
 
-Estimating the rate at which samples are left by bears was found to be
-biased as well. As the rate of samples found and as the bears
-territories increase, the bias in the estimate increase as well. Since
-we can’t get an accurate estimate of this rate it is difficult to
-estimate the population estimate bias from a real world sample in which
-the rate is unknown.
+Estimating the size of the territories as well as the rate at which
+samples are left by bears was found to be biased as well. As the rate of
+samples found and as the bears territories increase, the bias in the
+estimates increase as well. Since we can’t get an accurate estimate of
+these parameters it is difficult to make an exact estimate of the mean
+population estimate bias from a real world sample in which the rate is
+unknown.
+
+Applying the results of the simulation study to the Swedish survey the
+bias for each region was estimated to lay somewhere inbetween 5-13%
+
+***Acknowledgments***
+
+I would like to thank Martin Sköld for his advice and guidance.
 
 ***Method***
 
 We will be using the R language with RStudio to perform all
-calculations. The package tidyverse will be used for data management.
+calculations. The Rstudio packages used are included in the list of
+references.
 
 ***STATISTICAL MODELS AND ASSUMPTIONS***
 
@@ -141,6 +202,27 @@ For any area we are performing an inventory on *S*, we define the area
 that lies within distance *l* from the border of *S* as *O* and *W* as
 the union of *S* and *O*. Both *S* and *O* have different bear
 populations but with the same population density.
+
+In Miller et al.,(2005) a Multinomial distribution is used as a model
+for the samples. The idea is that we condition on the number of samples
+observed and for each sample assume that each bear has an equal
+probability of expelling the sample in question. As such the number of
+samples left by any bear is *B*(*M*,1/*N*) where *M* is the total number
+of samples and *N* is the total population of bears in the region.
+However the multinomial distribution is slightly difficult to work with
+especially as due to spatial reasons the number of samples we expect to
+observe from each bear is not equal for all bears. As it is easier to
+work with each bear having its own independent distribution for the
+number of samples it leaves we will instead assume each bear leaves
+samples based on the *B*(*M*,1/*N*) distribution. Since the observed
+values for *M* is relatively large and 1/*N* is relatively small we can
+approximate the binomial distribution with the poisson distribution
+*P**o**i**s**s**o**n*(*M*/*N*) = *P**o**i**s**s**o**n*(*λ*<sub>0</sub>).
+
+A thorough explanation of approximating the multinomial distribution
+with the poisson distribution can be read in *“On the Poisson
+approximation to the multinomial distribution”* McDonald & David,
+(1980).
 
 The number of samples that bear number *i* leaves is
 *K*<sub>*i*</sub> ∼ *P**o**i**s**s**o**n*(*λ*<sub>0</sub>). For each
@@ -206,12 +288,16 @@ Let *N**O**b**s* *N*<sup>obs</sup> be the number of bears observed,
 midpoint actually belong to *S* and *N*<sub>*F*</sub><sup>obs</sup> be
 the number of bears observed whose midpoint does not belong to *S*.
 
+Since the probability that an outcome of a *P**o**i**s**s**o**n*(*λ*)
+distribution is 1 or larger is (1−*e*<sup>−*λ*</sup>) then we have
+
+*N*(1−*e*<sup>−*λ*</sup>) = *E*(*N*<sup>obs</sup>)
+
 The estimate for the total number of bears in *S* is then.
 
 $$\\hat N =\\frac {N^{\\text{obs}}}{1-e^{\\hat \\lambda}}$$
 However this is done under the assumption that
-*N*<sup>obs</sup> = *N*<sub>*T*</sub><sup>obs</sup>. However in
-actuality
+*N*<sup>obs</sup> = *N*<sub>*T*</sub><sup>obs</sup>. However in our case
 
 *N*<sup>obs</sup> = *N*<sub>*T*</sub><sup>obs</sup> + *N*<sub>*F*</sub><sup>obs</sup>
 
@@ -230,11 +316,26 @@ the error in the estimation of *λ*.
 Since we measure the true value of *N* we can measure the bias *N̂* − *N*
 and analyse it.
 
-For the simulation values of *λ* and *σ*, values close to the ones
-observed for the bear census were used.
-
 For *λ* we use values 2, 3 and 4 and for *σ* we use 0.025, 0.05, 0.075,
-0.1, 0.2 and 0.3.
+and 0.1. These values were chosen because they are close to the ones
+estimated for the Swedish sample. There is little reason to use *λ*
+values higher than 4 because in our estimate of the total population
+size we use the transformation 1/(1−*e*<sup>−*λ*</sup>) instead of just
+*λ* by itself. When *λ* is larger than 4 the transformations value
+changes very little as can be seen in the FIGURE XXX.
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+We choose to keep *μ* at a constant value of 500 as the relative bias in
+the population estimate does not change with different average
+populations. A simulation was run to illustrate this and the results can
+be seen in FIGURE XXX
+
+``` r
+Figure7
+```
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ***Calculation intensive methods applied to real data.***
 
@@ -322,7 +423,7 @@ linearly with *σ* but for smaller values the estimate is relatively
 close. The bias is seemingly not influenced at all by the value of *λ*.
 
 For the estimate of *λ* we instead choose to look at the bias in the
-transformed version 1/(1−*e*<sup>−</sup>(*λ*)) as it also factor that we
+transformed version 1/(1−*e*<sup>−*λ*</sup>) as it also factor that we
 multiply the number of observed bears with to make our total population
 estimate. We can see from figure 4 how the bias grows in magnitude with
 as *σ* grows. The estimate is also biased for all values of *σ*. Since
@@ -330,13 +431,70 @@ both the estimate for *σ* and *λ* are biased we cannot use the mean bias
 estimated through the simulation to make an exact adjustment of a real
 samples population estimate.
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
 ![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
+Figure 1 shows how the mean bias in the population estimate grows
+seemingly linearly as *σ* (The size of the bears territories) grows. The
+mean bias grows faster as the value of *λ* (The rate at which samples
+are discovered) increases.
+
 ![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+Figure 2 shows the bias divided into 2 categories. The lambda error
+$\\frac {N^{\\text{obs}}\_T}{1-e^{\\hat \\lambda}} - N$ which is the
+mean bias in the population estimate we would have if only true bears
+were observed. The false bear error is
+$\\frac {N^{\\text{obs}}\_F}{1-e^{\\hat \\lambda}}$ which is the number
+of false bears observed in the sample further amplified by the factor we
+use to estimate the bears for which no samples were discovered.
+
+We can observe how the majority of the bias in population estimate can
+be attributed to the number of false bears observed and how it grows
+much faster than the error caused by the bias in the estimate of *λ*. If
+all false bears could be eliminated from the sample the remaining
+relative bias would not exceed 2.5%.
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+Figure 3 shows the bias when estimating the underlying parameters of the
+simulation. The methods utilized always underestimate both of the
+parameters and the bias grows along with *σ*. As both parameters are
+biased we cannot directly use the simulated data to get an exact
+estimation of the mean bias in a sample for which the underlying
+parameters are unknown.
+
+# The Swedish Samples
+
+``` r
+Figure4
+```
+
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+In figure 4 we can see the estimates of the bear population for 5 years
+of the Swedish survey. Year 2015 and 2020 were performed on the same
+region. The standard estimate is the one that is made without taking the
+location of the samples into accounts.
+
+The alternative estimate is the one in which the bears midpoints were
+re-evaluated and the bears whose midpoints ended up outside the region
+were removed. The method also improves the estimation of *λ* by taking
+into account that bears closer to the borders will have fewer mean
+number of samples observed.
+
+The Ratio estimate instead of counting each bear observed as one bear
+instead counts the estimated ratio of the bears territory that lies
+inside the surveyed region along with the alternative estimation of *λ*.
+
+The Simulated Unbiased Estimate assumes that the estimated values of *σ*
+and *λ* are true and reduce the standard estimate by the simulated mean
+bias for the corresponding parameter values. As the parameters are on
+average underestimated and the mean bias grows as the parameters grow we
+expect this estimate to overestimate the bear population if all the
+assumptions of the simulation are true.
+
+The alternative estimate does not differ much from the standard
+estimate. The Ratio estimate is noticeably lower than the standard
+estimate and the simulated unbiased estimate is even lower.
 
 ***Discussion***
 
@@ -362,32 +520,42 @@ bias is larger the larger the values for the parameters are.
 
 ###Swedish samples
 
+The population estimate of the alternative estimation method when
+applied to the Swedish samples did not differ dramatically from the
+normal method that does not take the bears positions into account.
+
 For each of the 4 regions in Sweden *σ* is estimated to lie somewhere
 inbetween 0.05 and 0.08 which from the simulation estimates would
-suggest that the relative bias for the regions lies inbetween 8 and 17
+suggest that the relative bias for the regions lies in-between 8 and 13
 percent. However the Swedish regions do differ from the simulation in
 certain ways. For example part of each Swedish region borders the Baltic
 Ocean in which brown bears are not known to live. As such the assumption
 that the population density of the outside region is the same as in the
-inside region does not hold for any of the Swedish regions.
+inside region does not hold for any of the Swedish regions. A better
+approximation of the bias could be achieved by multiplying the bias by
+the ratio of the border that does not touch the Baltic ocean.
+Furthermore the bear population is not consistent across the inside of
+the region either as bears are not known to wander freely throughout
+larger human settlements.
+
+While the simulation most likely differs quite a lot from the Swedish
+survey it does seem likely that the methods currently being utilized
+will on average overestimate the bear population but by exactly how much
+is not known. While better estimations could be made using different
+methods on the samples observed, changing the current surveying methods
+to better take the border problem into account would be more likely to
+get better results.
 
 # Future directions for research.
 
-The mean bias in the population estimate can be seen as a function of
-the underlying parameters *λ* and *σ*. However as these parameters need
-to be estimated and the estimate is biased even if we had an exact
-expression for the mean bias function applying it to a real sample would
-be difficult.
-
-As the value of the function 1/(1−*e*<sup>−*λ*</sup>) changes slowly
-when *λ* is larger than 3 we
-
-The population estimate of the alternative estimation method when
-applied to the Swedish samples did not differ dramatically from the
-normal method that does not take the bears positions into account. This
-could suggest that the border problem is not
-
-###TEST ON SWEDEN
+A way to get a better understanding of the border problem would be to
+extend the search for samples to some distance outside of the region
+currently being investigated. Not only would we have an easier time
+identifying bears from outside regions, we could also get a better
+estimate of the rate at which bear samples are observed by removing
+bears for which all samples lie very close to the new extended border
+without losing too much information about the region currently being
+surveyed.
 
 ***Appendix***
 
@@ -396,7 +564,7 @@ could suggest that the border problem is not
 #  kable()
 ```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 #Bias in the case only true bears were observed.
@@ -404,14 +572,62 @@ could suggest that the border problem is not
 FigureX
 ```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 #Function graph for the estimation factor.
 FunctionGraph
 ```
 
-![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](Bears-Across-Borders_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+SwedishResultsTable %>%
+  kable()
+```
+
+| year | sex   | Standard Estimate | Alt Estimate | Ratio Estimate | Standard Lambda | Alt Lambda | Normalized Sigma |
+|:-----|:------|------------------:|-------------:|---------------:|----------------:|-----------:|-----------------:|
+| 2015 | Hane  |          438.9666 |     437.2374 |       419.2321 |        4.706508 |   4.905714 |        0.0762118 |
+| 2015 | Hona  |          594.2778 |     592.4432 |       569.7841 |        3.801252 |   3.946863 |        0.0574793 |
+| 2015 | Total |         1033.2444 |    1029.6805 |       989.0162 |              NA |         NA |               NA |
+| 2016 | Hane  |          143.5283 |     140.1657 |       136.7642 |        2.438544 |   2.529981 |        0.0654466 |
+| 2016 | Hona  |          225.3331 |     223.2975 |       219.6450 |        2.405327 |   2.448531 |        0.0432451 |
+| 2016 | Total |          368.8614 |     363.4631 |       356.4092 |              NA |         NA |               NA |
+| 2017 | Hane  |          272.2243 |     259.0285 |       248.5888 |        3.188547 |   3.356554 |        0.0669158 |
+| 2017 | Hona  |          390.7397 |     386.9825 |       374.3613 |        3.211857 |   3.320572 |        0.0518495 |
+| 2017 | Total |          662.9639 |     646.0110 |       622.9501 |              NA |         NA |               NA |
+| 2019 | Hane  |          176.2526 |     173.7480 |       165.3290 |        2.025502 |   2.125154 |        0.0915389 |
+| 2019 | Hona  |          228.2444 |     224.1914 |       212.1645 |        1.840133 |   1.940800 |        0.0656059 |
+| 2019 | Total |          404.4969 |     397.9395 |       377.4935 |              NA |         NA |               NA |
+| 2020 | Hane  |          440.1865 |     438.4731 |       422.6845 |        3.434908 |   3.559724 |        0.0657033 |
+| 2020 | Hona  |          764.4728 |     759.9292 |       736.3503 |        3.042619 |   3.138866 |        0.0439210 |
+| 2020 | Total |         1204.6593 |    1198.4023 |      1159.0348 |              NA |         NA |               NA |
+
+``` r
+EstimatedBiasTable %>%
+  relocate(year, sex) %>%
+  arrange(year, sex) %>%
+  kable()
+```
+
+| year | sex   | Standard Estimate | Alt Estimate | Ratio Estimate | Simulated Unbiased Estimate | Estimated Simulated Bias | Simulated Bias Estimate |
+|:-----|:------|------------------:|-------------:|---------------:|----------------------------:|-------------------------:|------------------------:|
+| 2015 | Hane  |          438.9666 |     437.2374 |       419.2321 |                    375.1851 |                 63.78148 |                    0.17 |
+| 2015 | Hona  |          594.2778 |     592.4432 |       569.7841 |                    530.6052 |                 63.67262 |                    0.12 |
+| 2015 | Total |         1033.2444 |    1029.6805 |       989.0162 |                    905.7903 |                127.45410 |                      NA |
+| 2016 | Hane  |          143.5283 |     140.1657 |       136.7642 |                    128.1502 |                 15.37803 |                    0.12 |
+| 2016 | Hona  |          225.3331 |     223.2975 |       219.6450 |                    210.5917 |                 14.74142 |                    0.07 |
+| 2016 | Total |          368.8614 |     363.4631 |       356.4092 |                    338.7420 |                 30.11945 |                      NA |
+| 2017 | Hane  |          272.2243 |     259.0285 |       248.5888 |                    240.9064 |                 31.31784 |                    0.13 |
+| 2017 | Hona  |          390.7397 |     386.9825 |       374.3613 |                    358.4768 |                 32.26291 |                    0.09 |
+| 2017 | Total |          662.9639 |     646.0110 |       622.9501 |                    599.3832 |                 63.58075 |                      NA |
+| 2019 | Hane  |          176.2526 |     173.7480 |       165.3290 |                    153.2631 |                 22.98947 |                    0.15 |
+| 2019 | Hona  |          228.2444 |     224.1914 |       212.1645 |                    207.4949 |                 20.74949 |                    0.10 |
+| 2019 | Total |          404.4969 |     397.9395 |       377.4935 |                    360.7580 |                 43.73895 |                      NA |
+| 2020 | Hane  |          440.1865 |     438.4731 |       422.6845 |                    389.5456 |                 50.64092 |                    0.13 |
+| 2020 | Hona  |          764.4728 |     759.9292 |       736.3503 |                    701.3512 |                 63.12161 |                    0.09 |
+| 2020 | Total |         1204.6593 |    1198.4023 |      1159.0348 |                   1090.8968 |                113.76253 |                      NA |
 
 #Include link to github repository.
 

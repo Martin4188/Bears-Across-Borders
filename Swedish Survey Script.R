@@ -489,3 +489,78 @@ SwedishSurveyNoSex <- expand_grid(year = c("2015", "2016", "2017", "2019", "2020
 
 
 
+
+
+
+
+
+
+
+
+NaiveEstimate <- function(YEAR, SEX){
+  
+  
+  captures <- read_csv("data/captures.csv") %>%
+    group_by(id, year) %>%
+    rename(sample_lon = lon,
+           sample_lat = lat) %>%
+    mutate(center_lon = mean(sample_lon),
+           center_lat = mean(sample_lat),
+           n = n()) %>%
+    ungroup() %>%
+    filter(year == YEAR,
+           sex == SEX)
+  
+  
+  
+  MaxLikelihoodGeneratorZeroTrunc <- function(Tibble){
+    
+    function(lambda){
+      Tibble %>%
+        mutate(Likelihood = (lambda) ^ n / ((exp(lambda) - 1) * factorial(n))) %>%
+        mutate(Likelihood = -log(Likelihood)) %>%
+        ungroup() %>%
+        select(Likelihood) %>%
+        summarise(Sum = sum(Likelihood)) %>%
+        .[[1]]
+    } %>%
+      return()
+  }
+  
+  N <- captures %>%
+    select(id, n) %>%
+    distinct() %>%
+    summarise(n=n()) %>%
+    .[[1]]
+  
+  
+  LambdaEstimate <- captures %>% 
+    select(id, n) %>%
+    distinct() %>%
+    MaxLikelihoodGeneratorZeroTrunc() %>%
+    optim(lambda, ., 
+          hessian = TRUE, 
+          method = "L-BFGS-B",
+          lower = 0.1) %>%
+    .$par
+  
+  list(Estimate = N / (1 - exp(-LambdaEstimate)), LambdaHat = LambdaEstimate) %>%
+    as_tibble() %>%
+    return()
+  
+  
+  
+}
+
+StandardEstimate <- expand.grid(year = c("2015", "2016", "2017", "2019", "2020"), sex = c("Hane", "Hona")) %>%
+  rowwise() %>%
+  mutate(Estimate = NaiveEstimate(year, sex)) %>%
+  unpack(Estimate) %>%
+  write_csv("data/StandardEstimate")
+
+
+
+
+
+
+
