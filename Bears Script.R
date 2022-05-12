@@ -87,7 +87,7 @@ EstimatedBiasTable <- EstimatedBiasTibble %>%
 ###FIGURES###
 
 
-#Figure 1: Bias and standard error of the population estimate.
+# Bias and standard error of the population estimate.
 PopulationEstimateFigure <- RatioSimulation %>%
   select(lambda, sigma, MLE, NObs, NTrue) %>%
   mutate(PopEstimate = NObs / (1 - exp(-MLE)),
@@ -105,9 +105,10 @@ PopulationEstimateFigure <- RatioSimulation %>%
   mutate(lambda = lambda %>% as.factor()) %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 3: Mean bias of the simulated population estimate.", x = "sigma", y = "") +
+  labs(title = "", x = bquote(sigma), y = "") +
   xlim(0, 0.1) +
-  ylim(0, 0.25)
+  ylim(0, 0.25) +
+  scale_y_continuous(label = scales::percent) 
 
 #
 
@@ -173,15 +174,16 @@ TrueFalseBiasFigure <- RatioSimulation %>%
          NObsFalse = NObsFalse * factor,
          Relative = Relative * factor) %>%
   rename('False Bear Bias' = Relative,
-         'Lambda Bias' = relativeBias) %>%
-  pivot_longer(c('False Bear Bias', 'Lambda Bias'), names_to = "metric") %>%
+         'Without False Bears Bias' = relativeBias) %>%
+  pivot_longer(c('False Bear Bias', 'Without False Bears Bias'), names_to = "metric") %>%
   mutate(lambda = case_when(lambda == 2 ~ "lambda = 2",
                             lambda == 3 ~ "lambda = 3",
                             lambda == 4 ~ "lambda = 4")) %>%
   select(lambda, sigma, metric, value) %>%
   ggplot(aes(x = sigma, y = value, color = metric)) + geom_line()  + geom_point() + 
   facet_wrap(~lambda) +
-  labs(title = "Figure 4: Population bias divided into false bear and lambda bias.", x = "sigma", y = "")
+  labs(title = "", x = bquote(sigma), y = "") +
+  scale_y_continuous(label = scales::percent) 
 
 
 
@@ -200,7 +202,7 @@ ParameterBiasFigure <- RatioSimulation%>%
   pivot_longer(c('Lambda', 'Sigma'), names_to = "metric") %>%
   ggplot(aes(x = sigma, y = value, color = lambda %>% as.factor())) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 5: Bias in the estimation of the parameters.", x = "sigma", y = "", color = "Lambda")
+  labs(title = "", x = bquote(sigma), y = "", color = bquote(lambda))
 
 
 MultiplicationFactorFigure <- RatioSimulation %>%
@@ -221,7 +223,7 @@ MultiplicationFactorFigure <- RatioSimulation %>%
   mutate(lambda = lambda %>% as.factor()) %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Figure 10: Bias for the multiplication factor.", x = "sigma", y = "")
+  labs(title = "", x = bquote(sigma), y = "")
 
 
 
@@ -245,7 +247,7 @@ SwedishBearPopulationEstimateFigure1 <- EstimatedBiasTable  %>%
   ggplot(aes(y = value, x = sex, fill = factor(reorder(metric,-value)))) +
   geom_col(position = "dodge2") +
   facet_wrap(~year) +
-  labs(title = "Figure 8: Estimation of the Swedish bear population in 3 different regions.", x = "", y = "", fill = "Method")
+  labs(title = "", x = "", y = "", fill = "Method")
 
 
 SwedishBearPopulationEstimateFigure2 <- EstimatedBiasTable  %>%
@@ -263,7 +265,7 @@ SwedishBearPopulationEstimateFigure2 <- EstimatedBiasTable  %>%
   ggplot(aes(y = value, x = sex, fill = factor(reorder(metric,-value)))) +
   geom_col(position = "dodge2") +
   facet_wrap(~year) +
-  labs(title = "Figure 9: Estimation of the Swedish bear population in the same region.", x = "", y = "", fill = "Method")
+  labs(title = "", x = "", y = "", fill = "Method")
 
 
 
@@ -290,7 +292,10 @@ TotalPopulationRelativeBiasFigure <- NaiveSimulationMu %>%
   summarise(across(where(is.numeric), mean)) %>%
   select(mu, lambda, sigma, bias, relativeBias) %>%
   ggplot(aes(x = sigma, y = relativeBias, color = as_factor(mu))) + geom_line()  + geom_point() + 
-  labs(title = "Figure 1: Relative bias does not change with the total population.", x = "sigma", y = "Relative Bias", color = "mu")
+  labs(x = bquote(sigma), 
+       y = "Relative Bias", 
+       color = bquote(mu)) +
+  scale_y_continuous(label = scales::percent) 
 
 
 
@@ -301,7 +306,8 @@ base <-
   xlim(0, 6)
 
 FunctionGraph <- base + geom_function(fun = ~1 / (1- exp(-.x))) +
-  labs(title = "Function Graph 1: The function graph for the transformed lambda.", x = "Lambda", y = "")
+  labs(x = bquote(lambda), y = "")
+  
 
 
 
@@ -370,7 +376,8 @@ RatioEstimateBiasFigure <- RatioSimulation %>%
                             lambda == 4 ~ "lambda = 4")) %>%
   ggplot(aes(x = sigma, y = value, color = metric)) + geom_line()  + geom_point() + 
   facet_wrap(~lambda) +
-  labs(title = "Figure 6: Comparing bias in the population estimate between methods.", x = "sigma", y = "", color = "Method")
+  labs(title = "", x = bquote(sigma), y = "", color = "Method")  +
+  scale_y_continuous(label = scales::percent) 
   
 
 #Comparing bias in lambda between standard and ratio estimate.
@@ -390,7 +397,7 @@ RatioLambdaEstimateBiasFigure <- RatioSimulation %>%
                             lambda == 4 ~ "lambda = 4")) %>%
   ggplot(aes(x = sigma, y = value, color = metric)) + geom_line()  + geom_point() + 
   facet_wrap(~lambda) +
-  labs(title = "Figure 7: Comparing bias in the estimate of lambda between methods.", x = "sigma", y = "", color = "Method")
+  labs(title = "", x = bquote(sigma), y = "", color = "Method")
 
 
 
