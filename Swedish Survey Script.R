@@ -160,10 +160,10 @@ EstimatorFunction <- function(Year, Sex, tibble = captures){
         ungroup() %>%
         rowwise() %>%
         mutate(likelihood = Binormal(matrix(c(sample_lon - MidPoint[1], sample_lat - MidPoint[2]), 1, 2), sigmaEstimate),
+               likelihood = likelihood / InsideRatioFunction(MidPoint[1], MidPoint[2], sigmaEstimate, Region),
                likelihood = -log(likelihood)) %>%
         ungroup() %>%
         summarise(likelihood = sum(likelihood)) %>%
-        mutate(likelihood = likelihood / InsideRatioFunction(MidPoint[1], MidPoint[2], sigmaEstimate, Region)) %>%
         select(likelihood) %>%
         .[[1]]
     }

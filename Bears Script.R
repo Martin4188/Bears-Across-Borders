@@ -105,7 +105,7 @@ PopulationEstimateFigure <- RatioSimulation %>%
   mutate(lambda = lambda %>% as.factor()) %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "", x = bquote(sigma), y = "") +
+  labs(title = "", x = bquote(sigma), y = "", color = bquote(lambda)) +
   xlim(0, 0.1) +
   ylim(0, 0.25) +
   scale_y_continuous(label = scales::percent) 
@@ -223,7 +223,7 @@ MultiplicationFactorFigure <- RatioSimulation %>%
   mutate(lambda = lambda %>% as.factor()) %>%
   ggplot(aes(x = sigma, y = value, color = lambda)) + geom_line()  + geom_point() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(title = "", x = bquote(sigma), y = "")
+  labs(title = "", x = bquote(sigma), y = "", color = bquote(lambda))
 
 
 
