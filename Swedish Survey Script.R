@@ -236,57 +236,6 @@ SwedishSurvey <- expand_grid(sex = c("Hane", "Hona"), year = c("2015", "2016", "
   mutate(results = EstimatorFunction(Year = year, Sex = sex)) 
 
 
-SwedishSurvey1 <- expand_grid(sex = c("Hane"), year = c("2015")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey2 <- expand_grid(sex = c("Hane"), year = c("2016")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey3 <- expand_grid(sex = c("Hane"), year = c("2017")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey4 <- expand_grid(sex = c("Hane"), year = c("2019")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey5 <- expand_grid(sex = c("Hane"), year = c("2020")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey6 <- expand_grid(sex = c("Hona"), year = c("2015")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey7 <- expand_grid(sex = c("Hona"), year = c("2016")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey8 <- expand_grid(sex = c("Hona"), year = c("2017")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey9 <- expand_grid(sex = c("Hona"), year = c("2019")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-SwedishSurvey10 <- expand_grid(sex = c("Hona"), year = c("2020")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex))
-
-
-
-
-
-expand_grid(sex = c("Hona"), year = c("2017")) %>%
-  rowwise() %>%
-  mutate(results = EstimatorFunction(Year = year, Sex = sex)) 
-
-
-SwedishSurvey %>%
-  unpack(results)
 
 SwedishSurvey %>%
   unpack(results) %>%

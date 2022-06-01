@@ -310,52 +310,6 @@ FunctionGraph <- base + geom_function(fun = ~1 / (1- exp(-.x))) +
   
 
 
-
-
-
-
-
-##########################
-
-
-#Total <- SwedishSurveyResults %>%
-#  group_by(year) %>%
-#  select(year, sex, NObserved, WithoutOutsiders, RatioSum) %>%
-#  summarise(across(where(is.numeric), sum)) %>%
-#  mutate(sex = "Total")
-
-
-#SwedishSurveyResults %>%
-#  select(year, sex, NObserved, WithoutOutsiders, RatioSum) %>%
-#  full_join(Total, by = c("year", "sex", "NObserved", "WithoutOutsiders", "RatioSum"))
-
-
-#####
-#SwedishSurveyResults2 <- SwedishSurveyResults2 %>%
-#  mutate(year = as.factor(year)) %>%
-#  mutate(PopulationEstimate = NObserved / (1 - exp(-LambdaHat)),
-#         PopulationEstimate2 = RatioSum / (1 - exp(-LambdaHat)))
-#
-#SwedishResultsTable <- StandardEstimate %>%
-#  full_join(SwedishSurveyResults2, by = c("year", "sex")) %>%
-#  select(year, Estimate, PopulationEstimate, PopulationEstimate2, LambdaHat.x, LambdaHat.y, NormalizedSigma) %>%
-#  rename('Standard Estimate' = Estimate,
-#         'Alt Estimate' = PopulationEstimate,
-#         'Ratio Estimate' = PopulationEstimate2,
-#         'Standard Lambda' = LambdaHat.x,
-#         'Alt Lambda' = LambdaHat.y,
-#         'Normalized Sigma' = NormalizedSigma)
-  
-
-#SwedishSurveyResults2 %>%
-#  mutate(year = as.factor(year))
-
-###################
-
-
-
-  
-
 #########################################################
 
 
@@ -423,10 +377,3 @@ sigmaVisualizer <- function(SIGMA){
 }
 
 
-
-
-#map %>% 
-#  ggplot() + geom_sf(aes(fill = Inventering)) + theme_void() +
-#  geom_point(data = captures %>% filter(year == "2017"), 
-#             aes(x = sample_lon, y = sample_lat, size=I(0.1),stroke=I(0),shape=I(16))) +
-#  labs(title = "All Samples")
